@@ -3,6 +3,7 @@ import ExperienceSlider from "./components/ExperienceSlider";
 import ProjectImage from "./components/ProjectImage";
 import BackgroundBanner from "./components/BackgroundBanner";
 import Typewriter from "./components/Typewriter";
+import PhotoCollage from "./components/PhotoCollage";
 
 export default function Home() {
   return (
@@ -196,7 +197,7 @@ export default function Home() {
             <div className="rounded-xl border border-white/20 bg-black/70 backdrop-blur-sm p-4 hover:border-white/30 transition-all duration-300 shadow-lg">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Languages</h3>
               <div className="flex flex-wrap gap-3">
-              {["Python", "Java", "JavaScript", "TypeScript", "SQL", "Swift"].map((skill) => (
+              {["Python", "Java", "JavaScript", "TypeScript", "SQL", "Swift", "C++", "HTML", "CSS"].map((skill) => (
                 <span
                   key={skill}
                   className="rounded-lg bg-white/15 border border-white/30 px-3 py-2 text-sm text-white font-semibold hover:bg-white/25 transition-all duration-300 hover:scale-105 shadow-sm whitespace-nowrap"
@@ -211,7 +212,7 @@ export default function Home() {
             <div className="rounded-xl border border-white/20 bg-black/70 backdrop-blur-sm p-4 hover:border-white/30 transition-all duration-300 shadow-lg">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Frameworks</h3>
               <div className="flex flex-wrap gap-3">
-              {["React", "Next.js", "Node.js", "React Native"].map((skill) => (
+              {["React", "Next.js", "Node.js", "React Native", "Tailwind CSS"].map((skill) => (
                 <span
                   key={skill}
                   className="rounded-lg bg-white/15 border border-white/30 px-3 py-2 text-sm text-white font-semibold hover:bg-white/25 transition-all duration-300 hover:scale-105 shadow-sm whitespace-nowrap"
@@ -241,7 +242,7 @@ export default function Home() {
             <div className="rounded-xl border border-white/20 bg-black/70 backdrop-blur-sm p-4 hover:border-white/30 transition-all duration-300 shadow-lg">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Systems/Tools</h3>
               <div className="flex flex-wrap gap-3">
-              {["Linux", "Git/GitHub", "Firebase/Auth"].map((skill) => (
+              {["Linux", "Git/GitHub", "Firebase/Auth", "Figma", "Supabase"].map((skill) => (
                 <span
                   key={skill}
                   className="rounded-lg bg-white/15 border border-white/30 px-3 py-2 text-sm text-white font-semibold hover:bg-white/25 transition-all duration-300 hover:scale-105 shadow-sm whitespace-nowrap"
@@ -254,69 +255,33 @@ export default function Home() {
           </div>
         </section>
 
-        {/* INTERESTS SECTION */}
-        <section id="interests" className="space-y-6 animate-in fade-in duration-1000 delay-900">
-          <div>
-            <h2 className="text-3xl font-bold text-white drop-shadow-md">Interests</h2>
-            <p className="mt-2 text-slate-300 font-medium">What I enjoy outside of coding</p>
-        </div>
-          <div className="flex flex-wrap gap-4">
-            {[
-              { name: "Soccer", icon: "⚽" },
-              { name: "Golf", icon: "⛳" },
-              { name: "Poker", icon: "🃏" },
-            ].map((interest) => (
-              <div
-                key={interest.name}
-                className="flex items-center gap-2 rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-6 py-3 text-white font-semibold"
-              >
-                <span className="text-2xl">{interest.icon}</span>
-                <span>{interest.name}</span>
-              </div>
-            ))}
-            <a
-              href="https://youtube.com/@langdonhuynh"
-            target="_blank"
-            rel="noopener noreferrer"
-              className="group flex items-center gap-2 rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-6 py-3 text-white font-semibold transition-all hover:border-white/50 hover:bg-white/10 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
-            >
-              <span className="text-2xl">🎬</span>
-              <span>Video Editing (Check out my YouTube channel</span>
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              <span>)</span>
-            </a>
-          </div>
-        </section>
-
-        {/* EDUCATION SECTION */}
-        <section id="education" className="space-y-6 animate-in fade-in duration-1000 delay-1100">
+        {/* EDUCATION SECTION - Now above Interests */}
+        <section id="education" className="space-y-6 animate-in fade-in duration-1000 delay-700">
           <div>
             <h2 className="text-3xl font-bold text-white drop-shadow-md">Education</h2>
           </div>
           <div className="rounded-xl border border-white/20 bg-black/70 backdrop-blur-sm p-6 shadow-lg">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
+              <div className="flex-1 space-y-3">
                 <h3 className="text-xl font-bold text-white">
                   B.A. in Computer Science & B.A. in Applied Mathematics (Double Major)
                 </h3>
-                <p className="text-slate-200 font-semibold whitespace-nowrap">University of California, Berkeley</p>
-                <p className="mt-2 text-sm text-slate-300 font-medium">
+                <p className="text-slate-200 font-semibold">University of California, Berkeley</p>
+                <p className="text-sm text-slate-300 font-medium">
                   Relevant Coursework: Data Structures, Discrete Mathematics and Probability Theory, 
                   Structure and Interpretation of Computer Programs, Linear Algebra, Multivariable Calculus
                 </p>
-                <p className="mt-2 text-sm text-slate-300 font-medium">
+                <p className="text-sm text-slate-300 font-medium">
                   Activities: Berkeley Codeology, Mobile Developers of Berkeley, MPS Scholars, Berkeley SkyDeck
                 </p>
               </div>
               <a
                 href="https://www.berkeley.edu"
-            target="_blank"
-            rel="noopener noreferrer"
-                className="flex-shrink-0 group transition-all hover:scale-110"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 group transition-all hover:scale-110 self-start sm:self-center"
               >
-                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-lg border border-white/20 bg-black/50 backdrop-blur-sm overflow-hidden hover:border-white/40 transition-all">
+                <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-lg border border-white/20 bg-black/50 backdrop-blur-sm overflow-hidden hover:border-white/40 transition-all">
                   <Image
                     src="/berkeley-logo.jpg"
                     alt="UC Berkeley"
@@ -327,6 +292,30 @@ export default function Home() {
               </a>
             </div>
           </div>
+        </section>
+
+        {/* INTERESTS SECTION - Now below Education */}
+        <section id="interests" className="space-y-6 animate-in fade-in duration-1000 delay-900">
+          <div>
+            <h2 className="text-3xl font-bold text-white drop-shadow-md">Interests/Hobbies</h2>
+            <p className="mt-2 text-slate-300 font-medium">
+              Outside of coding, I enjoy hanging out with friends, playing soccer, golf, poker, traveling, snowboarding, sidequests, food, and everything in between. I also enjoy video editing{" "}
+              <a
+                href="https://youtube.com/@langdonhuynh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-baseline gap-1.5 text-red-500 hover:text-red-400 font-semibold transition-colors underline decoration-red-500/50 hover:decoration-red-400"
+              >
+                <svg className="w-4 h-4 self-center flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                <span className="align-baseline">YouTube Channel</span>
+              </a>
+              .
+            </p>
+          </div>
+
+          <PhotoCollage />
         </section>
 
         {/* FOOTER */}

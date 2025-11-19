@@ -81,6 +81,7 @@ const experiences: Experience[] = [
 export default function ExperienceSlider() {
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
@@ -115,45 +116,150 @@ export default function ExperienceSlider() {
     }
   };
 
+  const handlePrevious = () => {
+    const newIndex = currentIndex === 0 ? experiences.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+    setSelectedExperience(experiences[newIndex]);
+    setShowDetails(true);
+  };
+
+  const handleNext = () => {
+    const newIndex = currentIndex === experiences.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+    setSelectedExperience(experiences[newIndex]);
+    setShowDetails(true);
+  };
+
+  // Update currentIndex when selectedExperience changes
+  useEffect(() => {
+    const index = experiences.findIndex(exp => exp.id === selectedExperience?.id);
+    if (index !== -1) {
+      setCurrentIndex(index);
+    }
+  }, [selectedExperience]);
+
   return (
     <div className="space-y-8">
+      {/* Mobile Navigation Controls */}
+      <div className="flex justify-center items-center gap-4 md:hidden">
+        <button
+          onClick={handlePrevious}
+          className="rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-4 py-2 text-white font-semibold transition-all hover:border-white/50 hover:bg-white/10 hover:scale-105"
+          aria-label="Previous experience"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <span className="text-white text-sm font-medium">
+          {currentIndex + 1} / {experiences.length}
+        </span>
+        <button
+          onClick={handleNext}
+          className="rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-4 py-2 text-white font-semibold transition-all hover:border-white/50 hover:bg-white/10 hover:scale-105"
+          aria-label="Next experience"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
       {/* Static Company Logos */}
       <div 
         ref={containerRef}
-        className="w-full flex justify-center items-center gap-6"
+        className="w-full flex justify-center items-center gap-6 overflow-x-auto pb-4 scrollbar-hide"
       >
-        {experiences.map((exp) => (
+        {/* Mobile: Show only current experience */}
+        <div className="md:hidden">
           <button
-            key={exp.id}
-            onClick={() => handleExperienceClick(exp)}
+            onClick={() => handleExperienceClick(experiences[currentIndex])}
             className={`relative group transition-all duration-500 flex-shrink-0 ${
-              selectedExperience?.id === exp.id
+              selectedExperience?.id === experiences[currentIndex].id
                 ? "scale-110 opacity-100 z-10"
                 : "opacity-80 hover:opacity-100 hover:scale-105"
             }`}
             style={{ width: "320px", height: "320px" }}
           >
             <div className={`relative w-full h-full rounded-2xl border-2 bg-black/70 backdrop-blur-sm overflow-hidden transition-all duration-500 ${
-              selectedExperience?.id === exp.id
+              selectedExperience?.id === experiences[currentIndex].id
                 ? "border-white/60 shadow-2xl shadow-white/30"
                 : "border-white/20 hover:border-white/40"
             }`}>
               <Image
-                src={exp.logo}
-                alt={exp.company}
+                src={experiences[currentIndex].logo}
+                alt={experiences[currentIndex].company}
                 fill
                 className="object-contain p-8"
                 sizes="320px"
               />
             </div>
-            {selectedExperience?.id === exp.id && (
+            {selectedExperience?.id === experiences[currentIndex].id && (
               <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full animate-pulse shadow-lg shadow-white/50"></div>
             )}
           </button>
-        ))}
+        </div>
+
+        {/* Desktop: Show all experiences */}
+        <div className="hidden md:flex gap-6">
+          {experiences.map((exp) => (
+            <button
+              key={exp.id}
+              onClick={() => handleExperienceClick(exp)}
+              className={`relative group transition-all duration-500 flex-shrink-0 ${
+                selectedExperience?.id === exp.id
+                  ? "scale-110 opacity-100 z-10"
+                  : "opacity-80 hover:opacity-100 hover:scale-105"
+              }`}
+              style={{ width: "320px", height: "320px" }}
+            >
+              <div className={`relative w-full h-full rounded-2xl border-2 bg-black/70 backdrop-blur-sm overflow-hidden transition-all duration-500 ${
+                selectedExperience?.id === exp.id
+                  ? "border-white/60 shadow-2xl shadow-white/30"
+                  : "border-white/20 hover:border-white/40"
+              }`}>
+                <Image
+                  src={exp.logo}
+                  alt={exp.company}
+                  fill
+                  className="object-contain p-8"
+                  sizes="320px"
+                />
+              </div>
+              {selectedExperience?.id === exp.id && (
+                <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full animate-pulse shadow-lg shadow-white/50"></div>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Experience Details - Only show when clicked - Smaller popup */}
+      {/* Desktop Navigation Controls */}
+      <div className="hidden md:flex justify-center items-center gap-4">
+        <button
+          onClick={handlePrevious}
+          className="rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-4 py-2 text-white font-semibold transition-all hover:border-white/50 hover:bg-white/10 hover:scale-105"
+          aria-label="Previous experience"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <span className="text-white text-sm font-medium">
+          {currentIndex + 1} / {experiences.length}
+        </span>
+        <button
+          onClick={handleNext}
+          className="rounded-lg border border-white/30 bg-black/70 backdrop-blur-sm px-4 py-2 text-white font-semibold transition-all hover:border-white/50 hover:bg-white/10 hover:scale-105"
+          aria-label="Next experience"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Experience Details */}
       {selectedExperience && showDetails && (
         <div 
           ref={detailsRef}
