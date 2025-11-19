@@ -249,7 +249,7 @@ export default function PhotoCollage() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden space-y-3 md:space-y-4">
+    <div className="relative w-full space-y-3 md:space-y-4">
       {/* Multiple Rows with Different Scroll Directions */}
       {rows.map((rowPhotos, rowIndex) => {
         // Duplicate photos multiple times for seamless infinite scroll
@@ -260,7 +260,7 @@ export default function PhotoCollage() {
         return (
           <div 
             key={rowIndex}
-            className="relative h-[240px] md:h-[320px] overflow-visible"
+            className="relative h-[240px] md:h-[320px] overflow-x-hidden overflow-y-visible"
           >
             <div 
               className={`flex gap-3 md:gap-4 h-full items-center ${
