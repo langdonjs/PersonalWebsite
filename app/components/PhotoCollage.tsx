@@ -23,7 +23,7 @@ const getPersonalityPhotos = (): Photo[] => {
     '1658': 'MALATANG',
     '3018': 'Prime Langdon',
     '3706': 'Travel',
-    '7700': 'Special Moments',
+    '7700_Original': 'Cody Big Little Reveal',
     '70DEFB56': 'High School Soccer',
     '3J8A4081': 'High School Golf',
     '0435': '67',
