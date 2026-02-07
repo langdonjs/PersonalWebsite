@@ -23,12 +23,13 @@ export default function Home() {
                 <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 opacity-30 blur-xl group-hover:opacity-50 transition-opacity duration-500"></div>
                 <div className="relative rounded-2xl border border-white/20 bg-black/70 backdrop-blur-sm p-1 group-hover:border-white/30 transition-all duration-500 inline-block">
         <Image
-                    src="/pfp.png"
+                    src="/pfp.png?v=2"
                     alt="Langdon Huynh"
                     width={400}
                     height={400}
                     className="rounded-xl object-contain max-w-full h-auto"
-          priority
+                    priority
+                    unoptimized
         />
                 </div>
               </div>
