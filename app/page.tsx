@@ -1,17 +1,13 @@
 import Image from "next/image";
 import ExperienceSlider from "./components/ExperienceSlider";
 import ProjectImage from "./components/ProjectImage";
-import BackgroundBanner from "./components/BackgroundBanner";
 import Typewriter from "./components/Typewriter";
 import PhotoCollage from "./components/PhotoCollage";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black relative overflow-hidden">
-      {/* Berkeley Background Banner */}
-      <BackgroundBanner />
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 py-12 sm:px-8 sm:py-20">
+    <main className="relative z-10 min-h-screen bg-transparent">
+      <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 py-12 sm:px-8 sm:py-20">
         
         {/* HERO SECTION — portrait not shown; keep public/pfp.png (and headshot.png) in repo for later */}
         <section className="relative animate-in fade-in duration-1000">

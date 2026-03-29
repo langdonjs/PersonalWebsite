@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import BackgroundBanner from "./components/BackgroundBanner";
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -32,7 +34,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-slate-950 text-slate-100 antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-black text-slate-100 antialiased`}>
+        <BackgroundBanner />
         {children}
       </body>
     </html>
