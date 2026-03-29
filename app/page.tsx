@@ -13,30 +13,9 @@ export default function Home() {
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col gap-20 px-6 py-12 sm:px-8 sm:py-20">
         
-        {/* HERO SECTION WITH PROFILE PHOTO */}
+        {/* HERO SECTION — portrait not shown; keep public/pfp.png (and headshot.png) in repo for later */}
         <section className="relative animate-in fade-in duration-1000">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-            {/* Left: Profile Photo */}
-            <div className="space-y-6">
-              {/* Profile Photo */}
-              <div className="relative group w-fit">
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 opacity-30 blur-xl group-hover:opacity-50 transition-opacity duration-500"></div>
-                <div className="relative rounded-2xl border border-white/20 bg-black/70 backdrop-blur-sm p-1 group-hover:border-white/30 transition-all duration-500 inline-block">
-        <Image
-                    src="/headshot.png"
-                    alt="Langdon Huynh"
-                    width={400}
-                    height={400}
-                    className="rounded-xl object-contain max-w-full h-auto"
-                    priority
-                    unoptimized
-        />
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Name, Education, Bio and Social Links */}
-            <div className="space-y-6 animate-in slide-in-from-right duration-700">
+          <div className="max-w-3xl space-y-6 animate-in slide-in-from-right duration-700">
               {/* Name and Typewriter */}
               <div className="space-y-3">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -101,7 +80,6 @@ export default function Home() {
                   <p className="text-sm text-slate-400">langdon@berkeley.edu</p>
                 </div>
               </div>
-            </div>
           </div>
         </section>
 
