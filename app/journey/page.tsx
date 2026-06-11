@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Pokeball from "../components/Pokeball";
+import Pokeball from "../components/ui/Pokeball";
 
 export const metadata: Metadata = {
   title: "My Journey | Langdon Huynh",

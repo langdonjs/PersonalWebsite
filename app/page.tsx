@@ -1,9 +1,10 @@
-import Nav from "./components/Nav";
-import Hero from "./components/Hero";
-import SectionHeader from "./components/SectionHeader";
-import ExperienceList from "./components/ExperienceList";
-import ProjectList from "./components/ProjectList";
-import Reveal from "./components/Reveal";
+import Nav from "./components/layout/Nav";
+import Footer from "./components/layout/Footer";
+import Hero from "./components/sections/Hero";
+import SectionHeader from "./components/sections/SectionHeader";
+import ExperienceList from "./components/sections/ExperienceList";
+import ProjectList from "./components/sections/ProjectList";
+import Reveal from "./components/ui/Reveal";
 import InkSweep from "./components/ink/InkSweep";
 
 export default function Home() {
@@ -17,25 +18,19 @@ export default function Home() {
           <InkSweep className="absolute -left-32 top-40 w-[520px] opacity-10" />
           <Reveal>
             <SectionHeader num="01" title="Experience" />
-            <ExperienceList />
           </Reveal>
+          <ExperienceList />
         </section>
 
         <section id="projects" className="relative scroll-mt-14 px-5 pt-14 sm:px-9">
           <InkSweep flip className="absolute -right-24 top-64 w-[360px] opacity-[0.08]" />
           <Reveal>
             <SectionHeader num="02" title="Projects" />
-            <ProjectList />
           </Reveal>
+          <ProjectList />
         </section>
 
-        <footer className="flex items-center gap-3 px-5 py-12 sm:px-9">
-          <div className="h-px flex-1 bg-gradient-to-r from-black/10 to-transparent" />
-          <p className="text-[10px] uppercase tracking-[1px] text-[#bbb]">
-            © {new Date().getFullYear()} Langdon Huynh
-          </p>
-          <div className="h-px flex-1 bg-gradient-to-l from-black/10 to-transparent" />
-        </footer>
+        <Footer />
       </main>
     </>
   );

@@ -1,10 +1,10 @@
 import Link from "next/link";
-import Pokeball from "./Pokeball";
+import Pokeball from "../ui/Pokeball";
 
 export default function Nav() {
   return (
-    <nav className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-black/8 bg-[#f8f7f4]/80 px-5 backdrop-blur-xl sm:px-9">
-      <div className="flex items-center gap-5 sm:gap-8">
+    <nav className="sticky top-0 z-50 flex h-14 items-center justify-center border-b border-black/8 bg-[#f8f7f4]/80 backdrop-blur-xl">
+      <div className="flex items-center gap-6 sm:gap-10">
         <a href="#about" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
           About
         </a>
@@ -22,12 +22,6 @@ export default function Nav() {
           My Journey
         </Link>
       </div>
-      <a
-        href="mailto:langdon@berkeley.edu"
-        className="hidden text-[11px] font-medium text-[#888] transition-colors hover:text-[#111] sm:block"
-      >
-        langdon@berkeley.edu
-      </a>
     </nav>
   );
 }
