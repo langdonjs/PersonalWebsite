@@ -2,6 +2,8 @@ export type JournalEntry = {
   title: string;
   date: string;
   excerpt: string;
+  /** e.g. "6 min read" — shown Medium-style on /journal */
+  readTime?: string;
   /** Set when the piece is published; cards without it show "coming soon" */
   url?: string;
 };

@@ -23,7 +23,13 @@ app/
 │   └── page.tsx            # /journey — "coming soon" teaser (future Pokemon game lives here)
 │
 ├── life/
-│   └── page.tsx            # /life — "Beyond the code": interests, photos, bookshelf, journal
+│   └── page.tsx            # /life — photo-backdrop hero, portal cards, snapshot gallery
+│
+├── bookshelf/
+│   └── page.tsx            # /bookshelf — sortable/filterable reading table
+│
+├── journal/
+│   └── page.tsx            # /journal — Medium-style essay list
 │
 ├── data/                   # ✏️ EDIT THESE TO UPDATE CONTENT — no component code needed
 │   ├── experience.ts       # Internships: period, company, role, location, blurb
@@ -42,10 +48,10 @@ app/
     │   ├── ExperienceList.tsx # Renders data/experience.ts as ruled rows
     │   ├── ProjectList.tsx    # Renders data/projects.ts (name | square GIF | description)
     │   └── BeyondTeaser.tsx   # Home section 03: interest pills + fanned photos → /life
-    ├── life/               # /life page sections
+    ├── life/               # /life, /bookshelf, /journal building blocks
     │   ├── PhotoGallery.tsx   # Masonry photo grid with hover captions
     │   ├── Bookshelf.tsx      # Sortable/filterable table (client component)
-    │   └── JournalCards.tsx   # Essay cards ("in the works" until url is set)
+    │   └── PortalCards.tsx    # Bookshelf + journal illustrated link cards on /life
     ├── ui/                 # Small reusable pieces
     │   ├── Pokeball.tsx    # CSS-drawn pokeball icon (size prop)
     │   └── Reveal.tsx      # Fade-in-on-scroll wrapper (IntersectionObserver)
