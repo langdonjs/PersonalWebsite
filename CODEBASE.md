@@ -22,19 +22,30 @@ app/
 ├── journey/
 │   └── page.tsx            # /journey — "coming soon" teaser (future Pokemon game lives here)
 │
+├── life/
+│   └── page.tsx            # /life — "Beyond the code": interests, photos, bookshelf, journal
+│
 ├── data/                   # ✏️ EDIT THESE TO UPDATE CONTENT — no component code needed
 │   ├── experience.ts       # Internships: period, company, role, location, blurb
-│   └── projects.ts         # Projects: name, stack, year, blurb, links, media
+│   ├── projects.ts         # Projects: name, stack, year, blurb, links, media
+│   ├── life.ts             # Interests + gallery photos (file, caption) for /life
+│   ├── bookshelf.ts        # Bookshelf entries: title, author, category, rating, takeaway
+│   └── journal.ts          # Journal/essay cards: title, date, excerpt, url (optional)
 │
 └── components/
     ├── layout/             # Page chrome
     │   ├── Nav.tsx         # Sticky glass navbar (centered links + pokeball → /journey)
     │   └── Footer.tsx      # Copyright line
-    ├── sections/           # The main page sections
+    ├── sections/           # Home page sections
     │   ├── Hero.tsx        # Name, role line, bio, CTA buttons, headshot circle
-    │   ├── SectionHeader.tsx  # "01 — Experience ———" numbered header row
+    │   ├── SectionHeader.tsx  # "01 — Work Experience ———" numbered header row
     │   ├── ExperienceList.tsx # Renders data/experience.ts as ruled rows
-    │   └── ProjectList.tsx    # Renders data/projects.ts (name | square GIF | description)
+    │   ├── ProjectList.tsx    # Renders data/projects.ts (name | square GIF | description)
+    │   └── BeyondTeaser.tsx   # Home section 03: interest pills + fanned photos → /life
+    ├── life/               # /life page sections
+    │   ├── PhotoGallery.tsx   # Masonry photo grid with hover captions
+    │   ├── Bookshelf.tsx      # Sortable/filterable table (client component)
+    │   └── JournalCards.tsx   # Essay cards ("in the works" until url is set)
     ├── ui/                 # Small reusable pieces
     │   ├── Pokeball.tsx    # CSS-drawn pokeball icon (size prop)
     │   └── Reveal.tsx      # Fade-in-on-scroll wrapper (IntersectionObserver)
@@ -45,7 +56,8 @@ app/
 public/
 ├── headshot.png            # Hero photo
 ├── snorlax-icon.jpg        # Browser tab favicon
-└── archive/                # Old site images kept for later (photo collage, logos, etc.)
+├── personalityv2/          # Personal photos shown on /life (pick via data/life.ts)
+└── archive/                # Old site images kept for later (logos, etc.)
 
 docs/superpowers/           # Design specs + implementation plans (process docs)
 ```
@@ -59,6 +71,11 @@ Edit `app/data/experience.ts` or `app/data/projects.ts`. That's it — the compo
 1. Drop the file in `public/` (e.g. `public/clash3d.gif`)
 2. In `app/data/projects.ts`, add `media: "/clash3d.gif"` to that project
 3. The gray placeholder square is automatically replaced
+
+### Update bookshelf / journal / photos on /life
+- Books: `app/data/bookshelf.ts` — add entries; the table sorts/filters automatically
+- Journal: `app/data/journal.ts` — add `url` to a card when a piece is published
+- Photos: `app/data/life.ts` — point at files in `public/personalityv2/`, edit captions
 
 ### Change the hero bio / name / role line
 `app/components/sections/Hero.tsx` — the copy is inline there.

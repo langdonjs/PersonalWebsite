@@ -10,21 +10,10 @@ Scratchpad for improvements and feature ideas. CODEBASE.md explains how the site
 - Free pokemon-esque tilesets from itch.io / OpenGameArt
 - Mobile controls (touch joystick) vs keyboard on desktop
 
-### Bookshelf section (inspired by masonjwang.com/bookshelf)
-- Database/table style: sortable + filterable rows, like a personal Notion view
-- Fields per entry: title, author, category (fiction/nonfiction/advice/…), medium (book/essay/paper/video), rating, tags, short takeaway/comment
-- Category tabs (All / Favorites / by tag), color-coded tags
-- Implementation idea: `app/data/bookshelf.ts` typed array + a client component with sort/filter state — same data-file pattern as experience/projects, no backend needed
-
-### Writing / essays section (inspired by masonjwang.com writing section)
-- Blog-style cards: title, date, short description
-- Implementation idea: MDX files in `app/writing/` (one file per essay) with frontmatter (title, date, tags); Next.js renders them statically
-- Could start with just 1–2 pieces — advice, reflections, project writeups
-
-### About / photos page
-- A page that actually shows who I am — pictures, hobbies, memories
-- Reuse the photo collage assets saved in `public/archive/` (old photo roulette)
-- Could fold in the interests/hobbies copy from the old site (soccer, golf, poker, snowboarding, video editing, YouTube channel)
+### /life page follow-ups (page shipped 6/2026 — these are the remaining content tasks)
+- Replace placeholder bookshelf entries with real reads (`app/data/bookshelf.ts`)
+- Write real journal pieces; when one is ready, consider MDX files in `app/writing/` with frontmatter for full essay pages (cards currently link out via `url`)
+- Curate the photo selection + captions in `app/data/life.ts` (46 photos available in `public/personalityv2/`, 12 shown)
 
 ## Polish / small improvements
 - Replace SVG ink dragon with high-res sumi-e artwork (see CODEBASE.md → "Swap the ink artwork")
