@@ -26,6 +26,7 @@ export default function Bookshelf() {
   const [tab, setTab] = useState<Tab>("all");
   const [sortKey, setSortKey] = useState<SortKey>("rating");
   const [sortAsc, setSortAsc] = useState(false);
+  const [openTitle, setOpenTitle] = useState<string | null>(null);
 
   const entries = useMemo(() => {
     const filtered = bookshelf.filter((entry) => {
@@ -99,41 +100,64 @@ export default function Bookshelf() {
             </tr>
           </thead>
           <tbody>
-            {entries.map((entry) => (
-              <tr
-                key={entry.title}
-                className="border-b border-black/8 align-top transition-colors hover:bg-black/[0.025]"
-              >
-                <td className="max-w-[300px] py-3.5 pr-4">
-                  <p className="font-display text-[13.5px] font-bold text-[#111]">
-                    {entry.favorite && <span className="mr-1 text-[#bbb]">★</span>}
-                    {entry.title}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-[#999]">{entry.author}</p>
-                  <p className="mt-1.5 text-[11px] italic leading-[1.6] text-[#777]">
-                    {entry.takeaway}
-                  </p>
-                </td>
-                <td className="py-3.5 pr-4">
-                  <span
-                    className={`inline-block rounded px-2 py-0.5 text-[10px] font-semibold ${categoryStyles[entry.category]}`}
-                  >
-                    {entry.category}
-                  </span>
-                </td>
-                <td className="py-3.5 pr-4 text-[11px] text-[#777]">{entry.medium}</td>
-                <td className="py-3.5 text-[12px] font-bold text-[#111]">
-                  {entry.rating}
-                  <span className="font-normal text-[#bbb]">/10</span>
-                </td>
-              </tr>
-            ))}
+            {entries.map((entry) => {
+              const isOpen = openTitle === entry.title;
+              return (
+                <tr
+                  key={entry.title}
+                  onClick={() =>
+                    entry.notes && setOpenTitle(isOpen ? null : entry.title)
+                  }
+                  className={`border-b border-black/8 align-top transition-colors ${
+                    entry.notes ? "cursor-pointer" : ""
+                  } ${isOpen ? "bg-black/[0.03]" : "hover:bg-black/[0.025]"}`}
+                >
+                  <td className="max-w-[320px] py-3.5 pr-4">
+                    <p className="font-display text-[13.5px] font-bold text-[#111]">
+                      {entry.favorite && <span className="mr-1 text-[#bbb]">★</span>}
+                      {entry.title}
+                      {entry.notes && (
+                        <span className="ml-1.5 text-[10px] font-normal text-[#bbb]">
+                          {isOpen ? "▾" : "▸"}
+                        </span>
+                      )}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-[#999]">{entry.author}</p>
+                    <p className="mt-1.5 text-[11px] italic leading-[1.6] text-[#777]">
+                      {entry.takeaway}
+                    </p>
+                    {isOpen && entry.notes && (
+                      <div className="mt-3 rounded-md border-l-2 border-black/20 bg-white/70 py-2 pl-3 pr-2">
+                        <p className="text-[9.5px] font-semibold uppercase tracking-[1.5px] text-[#bbb]">
+                          Notes
+                        </p>
+                        <p className="mt-1 text-[11.5px] leading-[1.7] text-[#555]">
+                          {entry.notes}
+                        </p>
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-3.5 pr-4">
+                    <span
+                      className={`inline-block rounded px-2 py-0.5 text-[10px] font-semibold ${categoryStyles[entry.category]}`}
+                    >
+                      {entry.category}
+                    </span>
+                  </td>
+                  <td className="py-3.5 pr-4 text-[11px] text-[#777]">{entry.medium}</td>
+                  <td className="py-3.5 text-[12px] font-bold text-[#111]">
+                    {entry.rating}
+                    <span className="font-normal text-[#bbb]">/10</span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       <p className="mt-3 text-[10px] uppercase tracking-[1px] text-[#bbb]">
-        {entries.length} {entries.length === 1 ? "entry" : "entries"}
+        {entries.length} {entries.length === 1 ? "entry" : "entries"} · click a row for notes
       </p>
     </div>
   );

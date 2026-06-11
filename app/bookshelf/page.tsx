@@ -8,7 +8,7 @@ import InkSweep from "../components/ink/InkSweep";
 export const metadata: Metadata = {
   title: "Bookshelf | Langdon Huynh",
   description:
-    "Books, papers, and essays I've read — with ratings and takeaways.",
+    "Books, papers, and essays I've read, with ratings, takeaways, and notes.",
 };
 
 export default function BookshelfPage() {
@@ -29,7 +29,7 @@ export default function BookshelfPage() {
           </h1>
           <div className="hero-enter hero-enter-2 mt-6 h-px w-16 bg-[#111]" />
           <p className="hero-enter hero-enter-3 mt-6 max-w-[480px] text-[14.5px] leading-[1.8] text-[#555]">
-            Everything I&apos;ve read worth remembering — books, research papers,
+            Everything I&apos;ve read worth remembering: books, research papers,
             and essays, with a takeaway from each.
           </p>
         </section>

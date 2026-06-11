@@ -1,6 +1,6 @@
 /**
  * Sumi-e style dragon, hand-drawn SVG placeholder.
- * Swap this component's internals for a high-res raster illustration later —
+ * Swap this component's internals for a high-res raster illustration later;
  * consumers only rely on it filling its container width.
  */
 export default function InkDragon({ className = "" }: { className?: string }) {

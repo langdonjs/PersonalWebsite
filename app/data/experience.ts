@@ -21,7 +21,7 @@ export const experiences: Experience[] = [
     role: "Machine Learning Engineer Intern",
     location: "San Francisco",
     blurb:
-      "RF-DETR training pipelines, active learning across 8000+ frames, SAM 3 pre-labeling — 60% less annotation time.",
+      "RF-DETR training pipelines, active learning across 8000+ frames, SAM 3 pre-labeling for 60% less annotation time.",
   },
   {
     period: "May–Jul 2025",

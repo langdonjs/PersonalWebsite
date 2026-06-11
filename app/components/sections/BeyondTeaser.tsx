@@ -10,16 +10,16 @@ export default function BeyondTeaser() {
     <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[1fr_auto]">
       <div>
         <p className="max-w-[460px] text-[14.5px] leading-[1.8] text-[#555]">
-          There&apos;s more to me than commits and coursework — poker nights,
+          There&apos;s more to me than commits and coursework: poker nights,
           pickup soccer, mountains, and a camera roll full of good company.
         </p>
         <div className="mt-5 flex max-w-[460px] flex-wrap gap-2">
           {interests.slice(0, 6).map((interest) => (
             <span
-              key={interest.label}
+              key={interest}
               className="rounded-full border border-black/12 px-3.5 py-1.5 text-[11px] font-medium text-[#777]"
             >
-              {interest.emoji} {interest.label}
+              {interest}
             </span>
           ))}
         </div>

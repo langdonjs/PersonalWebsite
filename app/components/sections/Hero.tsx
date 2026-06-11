@@ -19,7 +19,7 @@ export default function Hero() {
         <div className="hero-enter hero-enter-2 mb-6 h-px w-16 bg-[#111]" />
         <p className="hero-enter hero-enter-3 max-w-[460px] text-[14.5px] leading-[1.8] text-[#555]">
           I build <strong className="font-semibold text-[#111]">AI systems</strong> at
-          the edge of vision and language — currently reconstructing the real world
+          the edge of vision and language, currently reconstructing the real world
           in 3D at <strong className="font-semibold text-[#111]">Looq AI</strong>.
           <br />
           <br />

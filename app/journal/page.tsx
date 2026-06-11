@@ -8,7 +8,7 @@ import { journal } from "../data/journal";
 
 export const metadata: Metadata = {
   title: "Journal | Langdon Huynh",
-  description: "Essays and reflections — internships, Berkeley, and building things.",
+  description: "Essays and reflections: internships, Berkeley, and building things.",
 };
 
 export default function JournalPage() {
@@ -29,7 +29,7 @@ export default function JournalPage() {
           </h1>
           <div className="hero-enter hero-enter-2 mt-6 h-px w-16 bg-[#111]" />
           <p className="hero-enter hero-enter-3 mt-6 max-w-[480px] text-[14.5px] leading-[1.8] text-[#555]">
-            Essays, reflections, and writeups — advice I&apos;d give, lessons from
+            Essays, reflections, and writeups. Advice I&apos;d give, lessons from
             internships, and how things got built.
           </p>
         </section>

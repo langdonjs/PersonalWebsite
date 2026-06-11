@@ -33,7 +33,7 @@ export const projects: Project[] = [
     stack: "React · Express · TypeScript · SQLite",
     year: "2026 · Perplexity Hackathon",
     blurb:
-      "A multi-agent AI security assessment tool that runs staged adversarial attacks against AI products — recon, prompt extraction, data exfiltration, privilege escalation — streaming live agent activity to a dashboard with an executive report.",
+      "A multi-agent AI security assessment tool that runs staged adversarial attacks against AI products (recon, prompt extraction, data exfiltration, privilege escalation), streaming live agent activity to a dashboard with an executive report.",
     monogram: "RF",
     gradient: "linear-gradient(135deg, #232326 0%, #4a4a50 100%)",
     links: [{ label: "GitHub", url: "https://github.com/langdonjs/RedForce" }],
@@ -53,7 +53,7 @@ export const projects: Project[] = [
     stack: "Python · scikit-learn · pandas",
     year: "2024–2025 · Published",
     blurb:
-      "Supervised models trained on engineered match-level features to predict Premier League outcomes across a full 380-game season — 61.5% accuracy vs a 33% baseline. Published in NHSJS.",
+      "Supervised models trained on engineered match-level features to predict Premier League outcomes across a full 380-game season, hitting 61.5% accuracy vs a 33% baseline. Published in NHSJS.",
     monogram: "PP",
     gradient: "linear-gradient(135deg, #2e2e32 0%, #5a5a60 100%)",
     links: [

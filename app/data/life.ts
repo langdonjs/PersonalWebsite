@@ -1,19 +1,23 @@
-export type Interest = {
-  label: string;
-  emoji: string;
-};
-
-export const interests: Interest[] = [
-  { label: "Poker", emoji: "♠️" },
-  { label: "Soccer", emoji: "⚽" },
-  { label: "Golf", emoji: "⛳" },
-  { label: "Snowboarding", emoji: "🏂" },
-  { label: "Calisthenics", emoji: "💪" },
-  { label: "Traveling", emoji: "✈️" },
-  { label: "Video editing", emoji: "🎬" },
-  { label: "Food adventures", emoji: "🍜" },
-  { label: "Sidequests", emoji: "🗺️" },
+export const interests: string[] = [
+  "Poker",
+  "Soccer",
+  "Golf",
+  "Snowboarding",
+  "Calisthenics",
+  "Traveling",
+  "Video editing",
+  "Food adventures",
+  "Sidequests",
 ];
+
+/**
+ * PLACEHOLDER COPY for the Hobbies section on /life.
+ * `now` is what you're currently into, `past` is what got you here.
+ */
+export const hobbies = {
+  now: "Placeholder: these days you can find me at poker nights with friends, pickup soccer at the RSF, and chasing new food spots around the Bay. I'm also slowly getting better at golf, emphasis on slowly.",
+  past: "Placeholder: I grew up playing competitive soccer, picked up snowboarding on winter trips to Tahoe, and spent high school editing videos for fun, which turned into a YouTube channel I still post to.",
+};
 
 export type Photo = {
   /** File inside /public/personalityv2 */
@@ -24,7 +28,7 @@ export type Photo = {
 
 /**
  * Photos shown in the /life gallery (subset of public/personalityv2).
- * Add/remove/reorder freely — captions are yours to edit.
+ * Add/remove/reorder freely, captions are yours to edit.
  */
 export const photos: Photo[] = [
   { src: "/personalityv2/3J8A4081.JPEG", caption: "Moments with friends" },

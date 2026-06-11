@@ -4,7 +4,7 @@ import Pokeball from "../components/ui/Pokeball";
 
 export const metadata: Metadata = {
   title: "My Journey | Langdon Huynh",
-  description: "A playable story of my path — coming soon.",
+  description: "A playable story of my path, coming soon.",
 };
 
 export default function Journey() {
@@ -18,7 +18,7 @@ export default function Journey() {
       </h1>
       <div className="mx-auto mt-6 h-px w-16 bg-[#111]" />
       <p className="mt-6 max-w-md text-sm leading-[1.8] text-[#666]">
-        A playable story of my path — gyms, routes, and internships.
+        A playable story of my path: gyms, routes, and internships.
         <br />
         <span className="font-semibold text-[#111]">Training in progress…</span>
       </p>

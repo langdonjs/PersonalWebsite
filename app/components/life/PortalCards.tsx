@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Bookshelf illustration — shelf frame with book spines */
+/** Bookshelf illustration: shelf frame with book spines */
 function BookshelfIcon() {
   return (
     <svg viewBox="0 0 120 100" className="h-24 w-auto" aria-hidden>
@@ -30,7 +30,7 @@ function BookshelfIcon() {
   );
 }
 
-/** Journal illustration — notebook with elastic band and pen */
+/** Journal illustration: notebook with elastic band and pen */
 function JournalIcon() {
   return (
     <svg viewBox="0 0 120 100" className="h-24 w-auto" aria-hidden>
@@ -59,14 +59,14 @@ const portals = [
   {
     href: "/bookshelf",
     title: "The Bookshelf",
-    desc: "What I'm reading — books, papers, and essays with ratings and takeaways.",
+    desc: "The lessons that shaped who I am: books, papers, and essays with ratings, takeaways, and notes.",
     cta: "Browse the shelf →",
     icon: <BookshelfIcon />,
   },
   {
     href: "/journal",
     title: "The Journal",
-    desc: "Essays and reflections — on internships, Berkeley, and things I'm figuring out.",
+    desc: "Essays and reflections on internships, Berkeley, and things I'm figuring out.",
     cta: "Read the journal →",
     icon: <JournalIcon />,
   },
