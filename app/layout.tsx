@@ -1,25 +1,24 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Bricolage_Grotesque, Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import BackgroundBanner from "./components/BackgroundBanner";
 
-const spaceGrotesk = Space_Grotesk({ 
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-bricolage",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Langdon Huynh | Personal Site",
+  title: "Langdon Huynh",
   description:
-    "CS and Applied Math student at UC Berkeley who builds web and mobile apps.",
+    "ML engineer + full stack developer. CS + Applied Math @ UC Berkeley. Building AI systems at the edge of vision and language.",
   icons: {
     icon: "/snorlax-icon.jpg",
     shortcut: "/snorlax-icon.jpg",
@@ -34,8 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-black text-slate-100 antialiased`}>
-        <BackgroundBanner />
+      <body
+        className={`${bricolage.variable} ${inter.variable} bg-[#f8f7f4] text-[#111] antialiased`}
+      >
         {children}
         <Analytics />
       </body>
