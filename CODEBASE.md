@@ -2,6 +2,8 @@
 
 A map of how this site is built and where to change things. Written for future-you.
 
+> Future ideas and the feature backlog live in [NOTES.md](NOTES.md) — this file only documents what exists.
+
 ## Stack
 
 - **Next.js 16** (App Router) + **React 19** + **TypeScript** — static site, no backend
