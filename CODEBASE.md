@@ -20,7 +20,7 @@ app/
 ├── page.tsx                # HOME PAGE — composes Nav + Hero + Experience + Projects + Footer
 │
 ├── journey/
-│   └── page.tsx            # /journey — "coming soon" teaser (future Pokemon game lives here)
+│   └── page.tsx            # /journey — isometric Pokemon-style biography game (Phaser 3)
 │
 ├── life/
 │   └── page.tsx            # /life — photo-backdrop hero, portal cards, snapshot gallery
@@ -36,7 +36,8 @@ app/
 │   ├── projects.ts         # Projects: name, stack, year, blurb, links, media
 │   ├── life.ts             # Interests + gallery photos (file, caption) for /life
 │   ├── bookshelf.ts        # Bookshelf entries: title, author, category, rating, takeaway
-│   └── journal.ts          # Journal/essay cards: title, date, excerpt, url (optional)
+│   ├── journal.ts          # Journal/essay cards: title, date, excerpt, url (optional)
+│   └── journey.ts          # Game dialogue: 15 landmarks, lines, photo placeholders
 │
 └── components/
     ├── layout/             # Page chrome
@@ -52,6 +53,14 @@ app/
     │   ├── PhotoGallery.tsx   # Masonry photo grid with hover captions
     │   ├── Bookshelf.tsx      # Sortable/filterable table (client component)
     │   └── PortalCards.tsx    # Bookshelf + journal illustrated link cards on /life
+    ├── journey/            # The /journey game
+    │   ├── JourneyGame.tsx    # Phaser mount + dialogue/photo overlay + touch controls
+    │   └── game/
+    │       ├── iso.ts         # Isometric projection math + constants
+    │       ├── frames.ts      # Tilesheet frame rects (alpha-bbox verified)
+    │       ├── gen.ts         # Runtime-drawn player/NPC/sign pixel sprites
+    │       ├── world.ts       # 64x64 map: terrain, path, 3 towns, landmarks, collision
+    │       └── WorldScene.ts  # Phaser scene: render, movement, interact, camera zoom
     ├── ui/                 # Small reusable pieces
     │   ├── Pokeball.tsx    # CSS-drawn pokeball icon (size prop)
     │   └── Reveal.tsx      # Fade-in-on-scroll wrapper (IntersectionObserver)
@@ -97,8 +106,12 @@ Replace the SVG inside `app/components/ink/InkDragon.tsx` (or `InkSweep.tsx`) wi
 - **Hero entrance** (name rising in on load): `.hero-enter` keyframes in `app/globals.css`; stagger delays via `.hero-enter-2/3/4` classes in `Hero.tsx`
 - **Scroll fade-ins**: `app/components/ui/Reveal.tsx` + `.reveal` classes in `globals.css`. Rows stagger via the `delay` prop (`delay={i * 100}`)
 
-### Build the Pokemon game (phase 2)
-Replace `app/journey/page.tsx`. The pokeball nav button already points there.
+### Edit the journey game
+- Dialogue/story: `app/data/journey.ts` (landmark lines + photo labels)
+- Add real photos to the game: drop files in `public/`, set `src` on a landmark's photo entry
+- Map layout: `app/components/journey/game/world.ts` (buildings, signs, NPCs, scatter)
+- Dev shortcuts: `/journey?spawn=31,33&zoom=1.2` teleports the player for testing
+- Tile art attribution: `public/game/ATTRIBUTION.md` (Yar, CC-BY 3.0)
 
 ## Commands
 

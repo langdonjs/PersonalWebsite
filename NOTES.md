@@ -4,11 +4,11 @@ Scratchpad for improvements and feature ideas. CODEBASE.md explains how the site
 
 ## Backlog (rough priority)
 
-### Phase 2 — Pokemon journey game
-- Replace `/journey` coming-soon page with a playable isometric-2D world (Phaser.js)
-- Small island ("Langdon's Town"), gyms = internships, routes = skills
-- Free pokemon-esque tilesets from itch.io / OpenGameArt
-- Mobile controls (touch joystick) vs keyboard on desktop
+### Journey game follow-ups (game shipped 6/2026, isometric Phaser 3)
+- Add real photos: set `src` on photo entries in `app/data/journey.ts` (currently labeled placeholders)
+- Art upgrades: nicer player/NPC sprites (replace runtime-drawn ones in `game/gen.ts`), golf flag, TV prop, dock boat
+- Possible: footstep sounds, ambient music toggle, animated water
+- Walk-through tall grass rustle effect
 
 ### /life page follow-ups (page shipped 6/2026 — these are the remaining content tasks)
 - Replace placeholder bookshelf entries with real reads (`app/data/bookshelf.ts`)
