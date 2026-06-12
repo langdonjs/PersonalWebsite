@@ -33,22 +33,22 @@ export default function JourneyGame() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const [Phaser, { WorldScene }] = await Promise.all([
+      const [Phaser, { IslandScene }] = await Promise.all([
         import("phaser"),
-        import("./game/WorldScene"),
+        import("./game/IslandScene"),
       ]);
       if (cancelled || !hostRef.current) return;
       gameRef.current = new Phaser.Game({
         type: Phaser.AUTO,
         parent: hostRef.current,
-        backgroundColor: "#7ec850",
-        pixelArt: true,
+        backgroundColor: "#0a0a1a",
+        pixelArt: false,
         scale: {
           mode: Phaser.Scale.RESIZE,
           width: "100%",
           height: "100%",
         },
-        scene: [WorldScene],
+        scene: [IslandScene],
       });
     })();
     return () => {
@@ -128,7 +128,7 @@ export default function JourneyGame() {
     (!landmark.photos || photo === landmark.photos.length - 1);
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-[#7ec850]">
+    <div className="relative h-dvh w-full overflow-hidden bg-[#0a0a1a]">
       <div ref={hostRef} className="absolute inset-0" />
 
       {/* HUD top bar */}
@@ -243,7 +243,7 @@ export default function JourneyGame() {
 
       {/* attribution */}
       <p className="pointer-events-none absolute bottom-1 left-1/2 z-10 -translate-x-1/2 text-[8px] text-black/35">
-        tiles by Yar (opengameart.org, CC-BY 3.0)
+        world art generated with AI · made with Phaser
       </p>
     </div>
   );

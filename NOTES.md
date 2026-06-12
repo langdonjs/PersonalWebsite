@@ -4,11 +4,11 @@ Scratchpad for improvements and feature ideas. CODEBASE.md explains how the site
 
 ## Backlog (rough priority)
 
-### Journey game follow-ups (game shipped 6/2026, isometric Phaser 3)
+### Journey game follow-ups (floating-island version shipped 6/2026)
 - Add real photos: set `src` on photo entries in `app/data/journey.ts` (currently labeled placeholders)
-- Art upgrades: nicer player/NPC sprites (replace runtime-drawn ones in `game/gen.ts`), golf flag, TV prop, dock boat
-- Possible: footstep sounds, ambient music toggle, animated water
-- Walk-through tall grass rustle effect
+- Fine-tune hotspot/collider circles in `game/islands.ts` after playtesting
+- Possible: ambient music toggle, bridge creak/footstep sounds, cloud drift in the void
+- Islands are AI art: regenerate any island and re-run the background cut to swap it
 
 ### /life page follow-ups (page shipped 6/2026 — these are the remaining content tasks)
 - Replace placeholder bookshelf entries with real reads (`app/data/bookshelf.ts`)
