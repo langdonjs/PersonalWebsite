@@ -31,6 +31,8 @@ export class IslandScene extends Phaser.Scene {
   private touch: TouchState = { up: false, down: false, left: false, right: false };
   private facing: Dir = "up";
   private fontFamily = "monospace";
+  private night = true;
+  private clouds: Phaser.GameObjects.Image[] = [];
 
   constructor() {
     super("islands");
@@ -49,8 +51,12 @@ export class IslandScene extends Phaser.Scene {
     const host = this.game.canvas.parentElement;
     if (host) this.fontFamily = getComputedStyle(host).fontFamily || "monospace";
 
-    this.cameras.main.setBackgroundColor("#0a0a1a");
-    this.makeStarfield();
+    const skyQ = new URLSearchParams(window.location.search).get("sky");
+    const hour = new Date().getHours();
+    this.night = skyQ === "night" || (skyQ !== "day" && (hour < 7 || hour >= 19));
+    this.cameras.main.setBackgroundColor(this.night ? "#0a0a1a" : "#9ccaef");
+    if (this.night) this.makeStarfield();
+    else this.makeClouds();
     this.makeBridges();
 
     /* islands */
@@ -63,10 +69,10 @@ export class IslandScene extends Phaser.Scene {
       for (const spot of isle.hotspots) {
         const lm = landmarks[spot.landmarkId];
         if (!lm) continue;
-        const lx = isle.wx + spot.x;
-        const ly = isle.wy + spot.y;
+        const lx = isle.wx + (spot.labelX ?? spot.x);
+        const ly = isle.wy + (spot.labelY ?? spot.y - spot.r) - 26;
         const label = this.add
-          .text(lx, ly - spot.r - 26, lm.label, {
+          .text(lx, ly, lm.label, {
             fontFamily: this.fontFamily,
             fontSize: "13px",
             color: "#ffffff",
@@ -78,7 +84,7 @@ export class IslandScene extends Phaser.Scene {
           .setDepth(40);
         this.tweens.add({
           targets: label,
-          y: ly - spot.r - 34,
+          y: ly - 8,
           duration: 1400,
           yoyo: true,
           repeat: -1,
@@ -197,6 +203,38 @@ export class IslandScene extends Phaser.Scene {
       .setScrollFactor(0.35);
   }
 
+  private makeClouds() {
+    const g = this.make.graphics({ x: 0, y: 0 }, false);
+    const blobs: [number, number, number, number][] = [
+      [70, 70, 60, 28],
+      [130, 60, 75, 32],
+      [190, 72, 55, 26],
+      [110, 84, 90, 24],
+    ];
+    for (const [cx, cy, rx, ry] of blobs) {
+      g.fillStyle(0xffffff, 0.35).fillEllipse(cx, cy + 4, rx * 2.2, ry * 2.2);
+      g.fillStyle(0xffffff, 0.85).fillEllipse(cx, cy, rx * 2, ry * 2);
+    }
+    g.generateTexture("cloud", 280, 130);
+    g.destroy();
+
+    let seed = 4242;
+    const rnd = () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
+    for (let i = 0; i < 9; i++) {
+      const c = this.add
+        .image(rnd() * WORLD_W, rnd() * WORLD_H, "cloud")
+        .setScale(1.2 + rnd() * 2)
+        .setAlpha(0.5 + rnd() * 0.35)
+        .setDepth(2)
+        .setScrollFactor(0.45);
+      c.setData("speed", 12 + rnd() * 22);
+      this.clouds.push(c);
+    }
+  }
+
   private makeBridges() {
     /* plank texture */
     const g = this.make.graphics({ x: 0, y: 0 }, false);
@@ -206,26 +244,70 @@ export class IslandScene extends Phaser.Scene {
     g.generateTexture("plank", 26, 112);
     g.destroy();
 
+    /* post texture */
+    const pg = this.make.graphics({ x: 0, y: 0 }, false);
+    pg.fillStyle(0x4a3018, 1).fillRoundedRect(0, 0, 14, 64, 4);
+    pg.fillStyle(0x6b4a2a, 1).fillRoundedRect(2, 2, 10, 60, 3);
+    pg.generateTexture("bridge-post", 14, 64);
+    pg.destroy();
+
     for (const b of bridges) {
       const dx = b.x2 - b.x1;
       const dy = b.y2 - b.y1;
       const len = Math.hypot(dx, dy);
-      const angle = Math.atan2(dy, dx);
-      const step = 30;
+      const sag = len * 0.045;
+      const point = (t: number) => ({
+        x: b.x1 + dx * t,
+        y: b.y1 + dy * t + 4 * sag * t * (1 - t),
+      });
+
+      /* soft shadow under the deck */
+      const shadow = this.add.graphics().setDepth(4);
+      shadow.lineStyle(BRIDGE_HALF_WIDTH * 1.6, 0x000000, 0.18);
+      shadow.beginPath();
+      shadow.moveTo(b.x1, b.y1 + 16);
+      for (let i = 1; i <= 24; i++) {
+        const q = point(i / 24);
+        shadow.lineTo(q.x, q.y + 16);
+      }
+      shadow.strokePath();
+
+      /* planks following the sag curve */
+      const step = 26;
       for (let d = 0; d <= len; d += step) {
-        const t = d / len;
+        const t0 = d / len;
+        const q = point(t0);
+        const q2 = point(Math.min(1, t0 + 0.01));
         this.add
-          .image(b.x1 + dx * t, b.y1 + dy * t, "plank")
-          .setRotation(angle)
+          .image(q.x, q.y, "plank")
+          .setRotation(Math.atan2(q2.y - q.y, q2.x - q.x))
           .setDepth(5);
       }
-      /* rope rails */
+
+      /* rope rails following the curve */
       const ropes = this.add.graphics().setDepth(6);
-      const nx = (-dy / len) * (BRIDGE_HALF_WIDTH - 8);
-      const ny = (dx / len) * (BRIDGE_HALF_WIDTH - 8);
-      ropes.lineStyle(5, 0x3a2a14, 1);
-      ropes.lineBetween(b.x1 + nx, b.y1 + ny, b.x2 + nx, b.y2 + ny);
-      ropes.lineBetween(b.x1 - nx, b.y1 - ny, b.x2 - nx, b.y2 - ny);
+      const nx = (-dy / len) * (BRIDGE_HALF_WIDTH - 10);
+      const ny = (dx / len) * (BRIDGE_HALF_WIDTH - 10);
+      for (const side of [1, -1]) {
+        ropes.lineStyle(5, 0x3a2a14, 1);
+        ropes.beginPath();
+        ropes.moveTo(b.x1 + nx * side, b.y1 + ny * side - 18);
+        for (let i = 1; i <= 24; i++) {
+          const q = point(i / 24);
+          ropes.lineTo(q.x + nx * side, q.y + ny * side - 18);
+        }
+        ropes.strokePath();
+      }
+
+      /* end posts */
+      for (const [ex, ey] of [
+        [b.x1 + nx, b.y1 + ny],
+        [b.x1 - nx, b.y1 - ny],
+        [b.x2 + nx, b.y2 + ny],
+        [b.x2 - nx, b.y2 - ny],
+      ]) {
+        this.add.image(ex, ey - 24, "bridge-post").setDepth(7);
+      }
     }
   }
 
@@ -335,6 +417,11 @@ export class IslandScene extends Phaser.Scene {
   update(_t: number, dtMs: number) {
     const cam = this.cameras.main;
     cam.setZoom(Phaser.Math.Linear(cam.zoom, this.targetZoom(), 0.03));
+
+    for (const c of this.clouds) {
+      c.x += (c.getData("speed") as number) * (dtMs / 1000);
+      if (c.x > WORLD_W + 500) c.x = -500;
+    }
 
     if (this.dialogOpen) {
       this.player.anims.stop();

@@ -186,14 +186,17 @@ export const landmarks: Record<string, Landmark> = {
     ],
     photos: [{ label: "PHOTO: katsu curry" }],
   },
-  bearStatue: {
-    id: "bearStatue",
-    speaker: "Bear Statue",
-    label: "GO BEARS",
+  clubs: {
+    id: "clubs",
+    speaker: "Club Fair Tent",
+    label: "CLUBS",
     lines: [
-      "Hard work. Empathy. Authenticity.",
-      "And the people around me, family and friends, above everything.",
+      "Joined Berkeley Codeology first.",
+      "SWE fundamentals, my first real projects, and people who pushed me.",
+      "Then Mobile Developers of Berkeley.",
+      "Where I learned how to actually build and ship mobile apps.",
     ],
+    photos: [{ label: "PHOTO: club friends" }],
   },
   lockedGate: {
     id: "lockedGate",

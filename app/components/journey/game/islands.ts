@@ -7,6 +7,9 @@ export type Hotspot = {
   y: number;
   /** interaction radius */
   r: number;
+  /** optional label position override (defaults to above the hotspot) */
+  labelX?: number;
+  labelY?: number;
 };
 
 export type Collider = { x: number; y: number; r: number };
@@ -40,7 +43,7 @@ export const islands: IslandDef[] = [
     wx: 0,
     wy: 600,
     hotspots: [
-      { landmarkId: "home", x: 615, y: 470, r: 130 },
+      { landmarkId: "home", x: 615, y: 470, r: 130, labelX: 330, labelY: 250 },
       { landmarkId: "mangaLibrary", x: 730, y: 320, r: 120 },
       { landmarkId: "minecraftCave", x: 1110, y: 320, r: 130 },
       { landmarkId: "sportsField", x: 960, y: 570, r: 150 },
@@ -87,7 +90,7 @@ export const islands: IslandDef[] = [
       { landmarkId: "campanile", x: 1010, y: 350, r: 120 },
       { landmarkId: "unit2", x: 1240, y: 320, r: 140 },
       { landmarkId: "foodStalls", x: 620, y: 690, r: 150 },
-      { landmarkId: "bearStatue", x: 1000, y: 650, r: 110 },
+      { landmarkId: "clubs", x: 1190, y: 520, r: 120, labelX: 1190, labelY: 400 },
       { landmarkId: "lockedGate", x: 1300, y: 770, r: 120 },
     ],
     colliders: [
@@ -97,6 +100,7 @@ export const islands: IslandDef[] = [
       { x: 1248, y: 205, r: 125 }, // dorm
       { x: 620, y: 610, r: 95 }, // food stalls
       { x: 1000, y: 595, r: 40 }, // bear statue
+      { x: 1190, y: 470, r: 70 }, // club fair tent
     ],
   },
 ];
@@ -109,13 +113,12 @@ export type Bridge = {
 };
 
 /**
- * Bridges start exactly at the painted stubs:
- * lodge dock tip (1040, 1000), toga west stub (45, 390),
- * toga SE dock (1330, 840), campanile SW stone bridge (200, 850).
+ * The painted bridge stubs were erased from the art; bridges now attach
+ * directly to the clean cliff edges.
  */
 export const bridges: Bridge[] = [
-  { x1: 0 + 1040, y1: 600 + 1000, x2: 1750 + 45, y2: 1500 + 390 },
-  { x1: 1750 + 1330, y1: 1500 + 840, x2: 3650 + 200, y2: 1400 + 850 },
+  { x1: 0 + 1090, y1: 600 + 850, x2: 1750 + 125, y2: 1500 + 400 },
+  { x1: 1750 + 1215, y1: 1500 + 838, x2: 3650 + 295, y2: 1400 + 845 },
 ];
 
 export const BRIDGE_HALF_WIDTH = 52;

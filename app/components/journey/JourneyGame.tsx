@@ -19,8 +19,18 @@ const dpadDirs = [
   { id: "down", label: "▼", area: "d" },
 ] as const;
 
+function isNight(): boolean {
+  if (typeof window === "undefined") return true;
+  const skyQ = new URLSearchParams(window.location.search).get("sky");
+  if (skyQ === "night") return true;
+  if (skyQ === "day") return false;
+  const hour = new Date().getHours();
+  return hour < 7 || hour >= 19;
+}
+
 export default function JourneyGame() {
   const hostRef = useRef<HTMLDivElement>(null);
+  const [night] = useState(isNight);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const gameRef = useRef<any>(null);
   const [zone, setZone] = useState<ZoneId>("lodge");
@@ -49,7 +59,7 @@ export default function JourneyGame() {
       gameRef.current = new Phaser.Game({
         type: Phaser.AUTO,
         parent: hostRef.current,
-        backgroundColor: "#0a0a1a",
+        backgroundColor: night ? "#0a0a1a" : "#9ccaef",
         pixelArt: false,
         scale: {
           mode: Phaser.Scale.RESIZE,
@@ -64,6 +74,8 @@ export default function JourneyGame() {
       gameRef.current?.destroy(true);
       gameRef.current = null;
     };
+    // night is stable for the session (decided once at mount)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startGame = useCallback(() => {
@@ -164,7 +176,7 @@ export default function JourneyGame() {
     (!landmark.photos || photo === landmark.photos.length - 1);
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-[#0a0a1a]">
+    <div className={`relative h-dvh w-full overflow-hidden ${night ? "bg-[#0a0a1a]" : "bg-[#9ccaef]"}`}>
       <div ref={hostRef} className="absolute inset-0" />
 
       {/* HUD top bar */}
