@@ -11,10 +11,10 @@ import {
 import { landmarks, type ZoneId } from "../../../data/journey";
 
 const SPEED = 380;
-const PLAYER_SCALE = 0.62;
+const PLAYER_SCALE = 0.4;
 /** sprite sheet: 3 cols x 4 rows; rows: 0 down, 1 left, 2 left-alt, 3 up */
-const FRAME_W = 160;
-const FRAME_H = 200;
+const FRAME_W = 199;
+const FRAME_H = 333;
 
 export type TouchState = { up: boolean; down: boolean; left: boolean; right: boolean };
 
@@ -22,7 +22,7 @@ type Dir = "up" | "down" | "left" | "right";
 
 export class IslandScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
-  private dialogOpen = false;
+  private dialogOpen = true; // blocked until the intro overlay is dismissed
   private lastZone = "";
   private nearHotspot: { landmarkId: string } | null = null;
   private prompt!: Phaser.GameObjects.Text;
@@ -114,7 +114,7 @@ export class IslandScene extends Phaser.Scene {
 
     /* interact prompt */
     this.prompt = this.add
-      .text(0, 0, "[A] interact", {
+      .text(0, 0, "[SPACE] interact", {
         fontFamily: this.fontFamily,
         fontSize: "11px",
         color: "#ffe27a",
@@ -151,14 +151,17 @@ export class IslandScene extends Phaser.Scene {
     window.addEventListener("journey:touch", onTouch);
     window.addEventListener("journey:action", onAction);
     window.addEventListener("journey:dialog-closed", onDialogClosed);
+    window.addEventListener("journey:intro-done", onDialogClosed);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       window.removeEventListener("journey:touch", onTouch);
       window.removeEventListener("journey:action", onAction);
       window.removeEventListener("journey:dialog-closed", onDialogClosed);
+      window.removeEventListener("journey:intro-done", onDialogClosed);
     });
 
-    /* dev override: /journey?spawn=x,y */
+    /* dev override: /journey?spawn=x,y&intro=0 */
     const qs = new URLSearchParams(window.location.search);
+    if (qs.get("intro") === "0") this.dialogOpen = false;
     const spawnQ = qs.get("spawn");
     if (spawnQ) {
       const [sx, sy] = spawnQ.split(",").map(Number);
@@ -253,7 +256,8 @@ export class IslandScene extends Phaser.Scene {
     return false;
   }
 
-  private canWalk(x: number, y: number): boolean {
+  /** a single point is walkable if it's on solid island ground or a bridge */
+  private pointWalkable(x: number, y: number): boolean {
     const isle = this.islandAt(x, y);
     if (isle) {
       const lx = x - isle.wx;
@@ -264,6 +268,17 @@ export class IslandScene extends Phaser.Scene {
       return true;
     }
     return this.onBridge(x, y);
+  }
+
+  /** feet must be supported at several sample points so the player can't hang off cliffs */
+  private canWalk(x: number, y: number): boolean {
+    return (
+      this.pointWalkable(x, y) &&
+      this.pointWalkable(x - 16, y) &&
+      this.pointWalkable(x + 16, y) &&
+      this.pointWalkable(x, y - 10) &&
+      this.pointWalkable(x, y + 8)
+    );
   }
 
   private targetZoom(): number {

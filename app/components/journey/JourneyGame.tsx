@@ -24,6 +24,14 @@ export default function JourneyGame() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const gameRef = useRef<any>(null);
   const [zone, setZone] = useState<ZoneId>("lodge");
+  /* dev: /journey?intro=0 skips the intro (screenshot testing) */
+  const [intro, setIntro] = useState(
+    () => typeof window === "undefined" || new URLSearchParams(window.location.search).get("intro") !== "0"
+  );
+  const introRef = useRef(true);
+  introRef.current = intro;
+  const [welcome, setWelcome] = useState<string | null>(null);
+  const welcomeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [dialog, setDialog] = useState<DialogState | null>(null);
   const dialogRef = useRef<DialogState | null>(null);
   dialogRef.current = dialog;
@@ -58,6 +66,27 @@ export default function JourneyGame() {
     };
   }, []);
 
+  const startGame = useCallback(() => {
+    setIntro(false);
+    window.dispatchEvent(new Event("journey:intro-done"));
+    setWelcome(zoneNames["lodge"]);
+    if (welcomeTimer.current) clearTimeout(welcomeTimer.current);
+    welcomeTimer.current = setTimeout(() => setWelcome(null), 2600);
+  }, []);
+
+  /* SPACE / Enter / click dismisses the intro */
+  useEffect(() => {
+    if (!intro) return;
+    const onKey = (ev: KeyboardEvent) => {
+      if (["Space", "Enter"].includes(ev.code)) {
+        ev.preventDefault();
+        startGame();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [intro, startGame]);
+
   const closeDialog = useCallback(() => {
     setDialog(null);
     window.dispatchEvent(new Event("journey:dialog-closed"));
@@ -81,7 +110,14 @@ export default function JourneyGame() {
     const onDialogue = (ev: Event) => {
       setDialog({ landmark: (ev as CustomEvent<Landmark>).detail, line: 0, photo: 0 });
     };
-    const onZone = (ev: Event) => setZone((ev as CustomEvent<ZoneId>).detail);
+    const onZone = (ev: Event) => {
+      const z = (ev as CustomEvent<ZoneId>).detail;
+      setZone(z);
+      if (introRef.current) return;
+      setWelcome(zoneNames[z]);
+      if (welcomeTimer.current) clearTimeout(welcomeTimer.current);
+      welcomeTimer.current = setTimeout(() => setWelcome(null), 2600);
+    };
     window.addEventListener("journey:dialogue", onDialogue);
     window.addEventListener("journey:zone", onZone);
     return () => {
@@ -174,7 +210,7 @@ export default function JourneyGame() {
             )}
             {landmark.photos!.length > 1 && (
               <p className="mt-1.5 text-center text-[9px] text-[#888]">
-                {(photo ?? 0) + 1} / {landmark.photos!.length} · [A] next
+                {(photo ?? 0) + 1} / {landmark.photos!.length} · [SPACE] next
               </p>
             )}
           </div>
@@ -195,9 +231,46 @@ export default function JourneyGame() {
               {landmark.lines[line ?? 0]}
             </p>
             <p className="mt-2 text-right text-[9px] text-[#5a6a8a]">
-              {atEnd ? "[A] close" : "[A] next"} · [B] exit ▾
+              {atEnd ? "[SPACE] close" : "[SPACE] next"} · [ESC] exit ▾
             </p>
           </div>
+        </div>
+      )}
+
+      {/* welcome banner */}
+      {welcome && !intro && (
+        <div className="pointer-events-none absolute inset-x-0 top-16 z-40 flex justify-center">
+          <div className="animate-bounce rounded-lg border-4 border-[#1a1a1a] bg-[#f8f7f4] px-6 py-3 text-sm text-[#111] shadow-[5px_5px_0_rgba(0,0,0,0.5)] sm:text-base">
+            Welcome to {welcome}!
+          </div>
+        </div>
+      )}
+
+      {/* intro screen */}
+      {intro && (
+        <div
+          className="absolute inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-[#0a0a1a]/92 px-6 text-center"
+          onClick={startGame}
+        >
+          <p className="text-[10px] tracking-wider text-[#7ec8ff]">LANGDON HUYNH PRESENTS</p>
+          <h1 className="mt-4 text-2xl leading-relaxed text-[#f8f7f4] sm:text-4xl">
+            MY JOURNEY
+          </h1>
+          <p className="mt-6 max-w-lg text-[10px] leading-[2.1] text-[#aab4d4] sm:text-xs">
+            A tiny isometric game about my life. Three floating islands, three
+            chapters: Langdon&apos;s Lodge → Toga Town → Campanile City. Walk
+            around, cross the bridges, and talk to everything to learn my story.
+          </p>
+          <div className="mt-8 rounded-lg border-2 border-[#2a3a5a] bg-[#10182a] px-5 py-4 text-left text-[9px] leading-[2.2] text-[#8a9ac0] sm:text-[10px]">
+            WASD / ARROWS · walk
+            <br />
+            SPACE · interact with landmarks
+            <br />
+            ESC · close dialogue
+          </div>
+          <p className="mt-8 animate-pulse text-[11px] text-[#ffe27a] sm:text-sm">
+            PRESS SPACE TO START
+          </p>
         </div>
       )}
 
