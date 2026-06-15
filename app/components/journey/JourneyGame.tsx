@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { Landmark } from "../../data/journey";
 import { zoneNames, type ZoneId } from "../../data/journey";
 
@@ -18,6 +19,24 @@ const dpadDirs = [
   { id: "right", label: "▶", area: "r" },
   { id: "down", label: "▼", area: "d" },
 ] as const;
+
+/* animated loading sprite: 11 poses of 220x360 in /game/loader-strip.png */
+const LOADER_FRAMES = 11;
+const LOADER_CELL_W = 220;
+const LOADER_CELL_H = 360;
+
+/* keyboard keycap, rendered in the pixel font of the page */
+function Key({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
+  return (
+    <kbd
+      className={`inline-flex h-9 items-center justify-center rounded-md border-2 border-[#1a1a1a] bg-[#f8f7f4] text-[10px] font-bold text-[#111] shadow-[0_3px_0_#1a1a1a] ${
+        wide ? "px-3" : "w-9"
+      }`}
+    >
+      {children}
+    </kbd>
+  );
+}
 
 function isNight(): boolean {
   if (typeof window === "undefined") return true;
@@ -42,6 +61,12 @@ export default function JourneyGame() {
   introRef.current = intro;
   const [welcome, setWelcome] = useState<string | null>(null);
   const welcomeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* animated loading screen shown between START and the playable game */
+  const [loading, setLoading] = useState(false);
+  const [loadFrame, setLoadFrame] = useState(0);
+  const [barFull, setBarFull] = useState(false);
+  const [introFrame, setIntroFrame] = useState(0);
+  const router = useRouter();
   const [dialog, setDialog] = useState<DialogState | null>(null);
   const dialogRef = useRef<DialogState | null>(null);
   dialogRef.current = dialog;
@@ -61,6 +86,11 @@ export default function JourneyGame() {
         parent: hostRef.current,
         backgroundColor: night ? "#0a0a1a" : "#9ccaef",
         pixelArt: false,
+        /* the game has no sound; skip Phaser's WebAudio AudioContext entirely.
+           Without this, remounts (Strict Mode / Fast Refresh / Exit) close the
+           context and a later pauseOnBlur suspend() throws "Cannot suspend a
+           closed AudioContext". */
+        audio: { noAudio: true },
         scale: {
           mode: Phaser.Scale.RESIZE,
           width: "100%",
@@ -78,26 +108,61 @@ export default function JourneyGame() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* START → show the animated loading screen; control passes to the game when it ends */
   const startGame = useCallback(() => {
     setIntro(false);
-    window.dispatchEvent(new Event("journey:intro-done"));
-    setWelcome(zoneNames["lodge"]);
-    if (welcomeTimer.current) clearTimeout(welcomeTimer.current);
-    welcomeTimer.current = setTimeout(() => setWelcome(null), 2600);
+    setLoading(true);
   }, []);
 
-  /* SPACE / Enter / click dismisses the intro */
+  useEffect(() => {
+    if (!loading) return;
+    setBarFull(false);
+    const grow = requestAnimationFrame(() => setBarFull(true));
+    let i = 0;
+    const anim = setInterval(() => {
+      i = (i + 1) % LOADER_FRAMES;
+      setLoadFrame(i);
+    }, 130);
+    const done = setTimeout(() => {
+      setLoading(false);
+      window.dispatchEvent(new Event("journey:intro-done"));
+      setWelcome(zoneNames["lodge"]);
+      if (welcomeTimer.current) clearTimeout(welcomeTimer.current);
+      welcomeTimer.current = setTimeout(() => setWelcome(null), 2600);
+    }, 1950);
+    return () => {
+      cancelAnimationFrame(grow);
+      clearInterval(anim);
+      clearTimeout(done);
+    };
+  }, [loading]);
+
+  /* intro: slowly cycle the trainer poses */
+  useEffect(() => {
+    if (!intro) return;
+    let i = 0;
+    const t = setInterval(() => {
+      i = (i + 1) % LOADER_FRAMES;
+      setIntroFrame(i);
+    }, 420);
+    return () => clearInterval(t);
+  }, [intro]);
+
+  /* SPACE / Enter / click starts; ESC returns to the portfolio home */
   useEffect(() => {
     if (!intro) return;
     const onKey = (ev: KeyboardEvent) => {
       if (["Space", "Enter"].includes(ev.code)) {
         ev.preventDefault();
         startGame();
+      } else if (ev.code === "Escape") {
+        ev.preventDefault();
+        router.push("/");
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [intro, startGame]);
+  }, [intro, startGame, router]);
 
   const closeDialog = useCallback(() => {
     setDialog(null);
@@ -258,31 +323,111 @@ export default function JourneyGame() {
         </div>
       )}
 
+      {/* loading screen — animated sprites of me cycling while the islands load */}
+      {loading && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0a0a1a] px-6 text-center">
+          <p className="text-[10px] tracking-[0.3em] text-[#7ec8ff]">NOW LOADING</p>
+          <div
+            aria-hidden
+            className="my-3"
+            style={{
+              width: LOADER_CELL_W,
+              height: LOADER_CELL_H,
+              backgroundImage: "url(/game/loader-strip.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: `-${loadFrame * LOADER_CELL_W}px 0px`,
+            }}
+          />
+          <Image
+            src="/game/langdons-world-logo.png"
+            alt="Langdon's World"
+            width={1846}
+            height={569}
+            className="h-auto w-[min(70vw,300px)]"
+          />
+          <div className="mt-5 h-2.5 w-60 overflow-hidden rounded-full border-2 border-[#2a3a5a] bg-[#10182a]">
+            <div
+              className="h-full rounded-full bg-[#ffe27a] transition-[width] duration-[1800ms] ease-linear"
+              style={{ width: barFull ? "100%" : "6%" }}
+            />
+          </div>
+          <p className="mt-3 animate-pulse text-[10px] leading-relaxed text-[#8a9ac0]">
+            crossing into the islands…
+          </p>
+        </div>
+      )}
+
       {/* intro screen */}
       {intro && (
         <div
           className="absolute inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-[#0a0a1a]/92 px-6 text-center"
           onClick={startGame}
         >
-          <p className="text-[10px] tracking-wider text-[#7ec8ff]">LANGDON HUYNH PRESENTS</p>
-          <h1 className="mt-4 text-2xl leading-relaxed text-[#f8f7f4] sm:text-4xl">
-            MY JOURNEY
-          </h1>
-          <p className="mt-6 max-w-lg text-[10px] leading-[2.1] text-[#aab4d4] sm:text-xs">
-            A tiny isometric game about my life. Three floating islands, three
-            chapters: Langdon&apos;s Lodge → Toga Town → Campanile City. Walk
-            around, cross the bridges, and talk to everything to learn my story.
+          {/* trainer mascot on the side, slowly cycling poses */}
+          <div
+            aria-hidden
+            className="absolute left-[6%] top-1/2 hidden -translate-y-1/2 xl:block"
+            style={{
+              width: LOADER_CELL_W,
+              height: LOADER_CELL_H,
+              backgroundImage: "url(/game/loader-strip.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: `-${introFrame * LOADER_CELL_W}px 0px`,
+            }}
+          />
+
+          <p className="text-[10px] tracking-[0.3em] text-[#7ec8ff]">LANGDON HUYNH PRESENTS</p>
+          <Image
+            src="/game/langdons-world-logo.png"
+            alt="Langdon's World"
+            width={1846}
+            height={569}
+            priority
+            className="mt-4 h-auto w-[min(82vw,520px)] drop-shadow-[0_4px_0_rgba(0,0,0,0.45)]"
+          />
+          <p className="mt-5 max-w-lg text-[10px] leading-[2.1] text-[#aab4d4] sm:text-xs">
+            A little game about my life — walk around and interact with the
+            landmarks, the people, and the islands to learn my story.
           </p>
-          <div className="mt-8 rounded-lg border-2 border-[#2a3a5a] bg-[#10182a] px-5 py-4 text-left text-[9px] leading-[2.2] text-[#8a9ac0] sm:text-[10px]">
-            WASD / ARROWS · walk
-            <br />
-            SPACE · interact with landmarks
-            <br />
-            ESC · close dialogue
+          <p className="mt-3 max-w-lg text-[10px] font-bold leading-[2.1] text-[#7ec8ff] sm:text-xs">
+            Langdon&apos;s Lodge → Toga Town → Campanile City
+          </p>
+
+          {/* control keys */}
+          <div className="mt-7 flex items-center gap-7">
+            <div className="flex flex-col items-center gap-1.5">
+              <div className="grid grid-cols-3 gap-1.5">
+                <span />
+                <Key>W</Key>
+                <span />
+                <Key>A</Key>
+                <Key>S</Key>
+                <Key>D</Key>
+              </div>
+              <span className="text-[8px] tracking-[0.2em] text-[#8a9ac0]">MOVE</span>
+            </div>
+            <div className="flex flex-col gap-2 text-left">
+              <div className="flex items-center gap-2">
+                <Key wide>SPACE</Key>
+                <span className="text-[9px] text-[#8a9ac0]">interact / talk</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Key wide>ESC</Key>
+                <span className="text-[9px] text-[#8a9ac0]">close dialogue</span>
+              </div>
+            </div>
           </div>
+
           <p className="mt-8 animate-pulse text-[11px] text-[#ffe27a] sm:text-sm">
             PRESS SPACE TO START
           </p>
+          <Link
+            href="/"
+            onClick={(e) => e.stopPropagation()}
+            className="pointer-events-auto mt-3 text-[9px] text-[#8a9ac0] underline-offset-4 hover:text-[#cdd8f0] hover:underline"
+          >
+            PRESS ESC TO RETURN TO HOME
+          </Link>
         </div>
       )}
 

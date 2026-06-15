@@ -9,9 +9,9 @@ const pressStart = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "My Journey | Langdon Huynh",
+  title: "Langdon's World | Langdon Huynh",
   description:
-    "A playable, Pokemon-style walk through my life: Langdon's Lodge, Toga Town, and Bear Territory.",
+    "A playable, Pokemon-style walk through my life: Langdon's Lodge, Toga Town, and Campanile City.",
 };
 
 export default function Journey() {

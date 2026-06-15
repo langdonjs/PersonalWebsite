@@ -23,7 +23,7 @@ export default function Nav() {
           className="flex items-center gap-2 text-xs font-semibold text-[#111] transition-opacity hover:opacity-70"
         >
           <Pokeball />
-          My Journey
+          Langdon&apos;s World
         </Link>
       </div>
     </nav>

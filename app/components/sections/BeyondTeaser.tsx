@@ -10,8 +10,8 @@ export default function BeyondTeaser() {
     <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[1fr_auto]">
       <div>
         <p className="max-w-[460px] text-[14.5px] leading-[1.8] text-[#555]">
-          There&apos;s more to me than commits and coursework: poker nights,
-          pickup soccer, mountains, and a camera roll full of good company.
+          I love sidequesting and there&apos;s more to me than commits and coursework. Poker nights,
+          pickup soccer, traveling, and a camera roll full of good company.
         </p>
         <div className="mt-5 flex max-w-[460px] flex-wrap gap-2">
           {interests.slice(0, 6).map((interest) => (

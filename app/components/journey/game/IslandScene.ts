@@ -33,6 +33,7 @@ export class IslandScene extends Phaser.Scene {
   private fontFamily = "monospace";
   private night = true;
   private clouds: Phaser.GameObjects.Image[] = [];
+  private rulerMode = false;
 
   constructor() {
     super("islands");
@@ -40,6 +41,7 @@ export class IslandScene extends Phaser.Scene {
 
   preload() {
     for (const isle of islands) this.load.image(isle.textureKey, isle.url);
+    for (const b of bridges) this.load.image(b.textureKey, b.url);
     this.load.spritesheet("player", "/game/islands/player-sheet.png", {
       frameWidth: FRAME_W,
       frameHeight: FRAME_H,
@@ -61,7 +63,7 @@ export class IslandScene extends Phaser.Scene {
 
     /* islands */
     for (const isle of islands) {
-      this.add.image(isle.wx, isle.wy, isle.textureKey).setOrigin(0, 0).setDepth(10);
+      this.add.image(isle.wx, isle.wy, isle.textureKey).setOrigin(0, 0).setDepth(isle.depth ?? 10);
     }
 
     /* floating labels + hotspot markers */
@@ -179,6 +181,97 @@ export class IslandScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
     this.cameras.main.setZoom(this.targetZoom());
     this.announceZone();
+
+    /* dev layout ruler: /journey?ruler=1 */
+    if (qs.get("ruler") === "1") this.enableRuler();
+  }
+
+  /* ── dev ruler (?ruler=1): grid + live cursor coords + per-piece wx,wy ── */
+  private enableRuler() {
+    this.rulerMode = true;
+    this.dialogOpen = false;
+    this.player.setVisible(false);
+
+    const cam = this.cameras.main;
+    cam.stopFollow();
+    const fit = Math.min(this.scale.width / WORLD_W, this.scale.height / WORLD_H) * 0.95;
+    cam.setZoom(fit);
+    cam.centerOn(WORLD_W / 2, WORLD_H / 2);
+
+    /* grid: thin lines every 100px, brighter every 500px */
+    const g = this.add.graphics().setDepth(45);
+    g.lineStyle(1, 0xffffff, 0.16);
+    for (let x = 0; x <= WORLD_W; x += 100) g.lineBetween(x, 0, x, WORLD_H);
+    for (let y = 0; y <= WORLD_H; y += 100) g.lineBetween(0, y, WORLD_W, y);
+    g.lineStyle(2, 0x66ddff, 0.45);
+    for (let x = 0; x <= WORLD_W; x += 500) g.lineBetween(x, 0, x, WORLD_H);
+    for (let y = 0; y <= WORLD_H; y += 500) g.lineBetween(0, y, WORLD_W, y);
+    for (let x = 0; x <= WORLD_W; x += 500)
+      for (let y = 0; y <= WORLD_H; y += 500)
+        this.add
+          .text(x + 3, y + 2, `${x},${y}`, {
+            fontFamily: this.fontFamily,
+            fontSize: "12px",
+            color: "#66ddff",
+          })
+          .setDepth(45)
+          .setAlpha(0.7);
+
+    /* per-piece label at each top-left corner */
+    const tag = (wx: number, wy: number, name: string) =>
+      this.add
+        .text(wx + 4, wy + 4, `${name}\nwx:${wx} wy:${wy}`, {
+          fontFamily: this.fontFamily,
+          fontSize: "15px",
+          color: "#ffe27a",
+          backgroundColor: "#000000cc",
+          padding: { x: 5, y: 3 },
+        })
+        .setDepth(60);
+    for (const isle of islands) tag(isle.wx, isle.wy, isle.id);
+    for (const b of bridges) tag(b.wx, b.wy, b.textureKey);
+
+    /* interaction zones (green) + collision walls (red), so barriers are editable by eye */
+    const zg = this.add.graphics().setDepth(46);
+    for (const isle of islands) {
+      zg.lineStyle(3, 0xff4444, 0.85);
+      for (const cc of isle.colliders) zg.strokeCircle(isle.wx + cc.x, isle.wy + cc.y, cc.r);
+      zg.lineStyle(3, 0x44ff88, 0.85);
+      for (const hh of isle.hotspots) zg.strokeCircle(isle.wx + hh.x, isle.wy + hh.y, hh.r);
+    }
+
+    /* HUD: live cursor world coords + controls help (pinned to camera) */
+    const hud = this.add
+      .text(8, 8, "cursor world  x: -   y: -", {
+        fontFamily: this.fontFamily,
+        fontSize: "16px",
+        color: "#ffffff",
+        backgroundColor: "#000000cc",
+        padding: { x: 8, y: 6 },
+      })
+      .setScrollFactor(0)
+      .setDepth(999);
+    this.add
+      .text(8, 44, "drag=pan · arrows=scroll · wheel=zoom · green=interact zone · red=wall", {
+        fontFamily: this.fontFamily,
+        fontSize: "12px",
+        color: "#aaccff",
+        backgroundColor: "#000000aa",
+        padding: { x: 6, y: 4 },
+      })
+      .setScrollFactor(0)
+      .setDepth(999);
+
+    this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
+      hud.setText(`cursor world  x: ${Math.round(p.worldX)}   y: ${Math.round(p.worldY)}`);
+      if (p.isDown) {
+        cam.scrollX -= (p.x - p.prevPosition.x) / cam.zoom;
+        cam.scrollY -= (p.y - p.prevPosition.y) / cam.zoom;
+      }
+    });
+    this.input.on("wheel", (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
+      cam.setZoom(Phaser.Math.Clamp(cam.zoom * (dy > 0 ? 0.9 : 1.1), 0.05, 2));
+    });
   }
 
   /* ── world dressing ── */
@@ -236,78 +329,13 @@ export class IslandScene extends Phaser.Scene {
   }
 
   private makeBridges() {
-    /* plank texture */
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    g.fillStyle(0x6b4a2a, 1).fillRoundedRect(0, 2, 26, 108, 5);
-    g.fillStyle(0x8a6a3a, 1).fillRoundedRect(2, 4, 22, 104, 4);
-    g.lineStyle(3, 0x4a3018, 1).strokeRoundedRect(1, 3, 24, 106, 5);
-    g.generateTexture("plank", 26, 112);
-    g.destroy();
-
-    /* post texture */
-    const pg = this.make.graphics({ x: 0, y: 0 }, false);
-    pg.fillStyle(0x4a3018, 1).fillRoundedRect(0, 0, 14, 64, 4);
-    pg.fillStyle(0x6b4a2a, 1).fillRoundedRect(2, 2, 10, 60, 3);
-    pg.generateTexture("bridge-post", 14, 64);
-    pg.destroy();
-
+    /* painted bridge sprites; islands draw on top so the deck ends tuck under the cliffs */
     for (const b of bridges) {
-      const dx = b.x2 - b.x1;
-      const dy = b.y2 - b.y1;
-      const len = Math.hypot(dx, dy);
-      const sag = len * 0.045;
-      const point = (t: number) => ({
-        x: b.x1 + dx * t,
-        y: b.y1 + dy * t + 4 * sag * t * (1 - t),
-      });
-
-      /* soft shadow under the deck */
-      const shadow = this.add.graphics().setDepth(4);
-      shadow.lineStyle(BRIDGE_HALF_WIDTH * 1.6, 0x000000, 0.18);
-      shadow.beginPath();
-      shadow.moveTo(b.x1, b.y1 + 16);
-      for (let i = 1; i <= 24; i++) {
-        const q = point(i / 24);
-        shadow.lineTo(q.x, q.y + 16);
-      }
-      shadow.strokePath();
-
-      /* planks following the sag curve */
-      const step = 26;
-      for (let d = 0; d <= len; d += step) {
-        const t0 = d / len;
-        const q = point(t0);
-        const q2 = point(Math.min(1, t0 + 0.01));
-        this.add
-          .image(q.x, q.y, "plank")
-          .setRotation(Math.atan2(q2.y - q.y, q2.x - q.x))
-          .setDepth(5);
-      }
-
-      /* rope rails following the curve */
-      const ropes = this.add.graphics().setDepth(6);
-      const nx = (-dy / len) * (BRIDGE_HALF_WIDTH - 10);
-      const ny = (dx / len) * (BRIDGE_HALF_WIDTH - 10);
-      for (const side of [1, -1]) {
-        ropes.lineStyle(5, 0x3a2a14, 1);
-        ropes.beginPath();
-        ropes.moveTo(b.x1 + nx * side, b.y1 + ny * side - 18);
-        for (let i = 1; i <= 24; i++) {
-          const q = point(i / 24);
-          ropes.lineTo(q.x + nx * side, q.y + ny * side - 18);
-        }
-        ropes.strokePath();
-      }
-
-      /* end posts */
-      for (const [ex, ey] of [
-        [b.x1 + nx, b.y1 + ny],
-        [b.x1 - nx, b.y1 - ny],
-        [b.x2 + nx, b.y2 + ny],
-        [b.x2 - nx, b.y2 - ny],
-      ]) {
-        this.add.image(ex, ey - 24, "bridge-post").setDepth(7);
-      }
+      this.add
+        .image(b.wx, b.wy, b.textureKey)
+        .setOrigin(0, 0)
+        .setAngle(b.angle ?? 0)
+        .setDepth(b.depth ?? 8);
     }
   }
 
@@ -327,12 +355,21 @@ export class IslandScene extends Phaser.Scene {
 
   private onBridge(x: number, y: number): boolean {
     for (const b of bridges) {
-      const dx = b.x2 - b.x1;
-      const dy = b.y2 - b.y1;
+      /* deck endpoints are stored sprite-local, rotated by the bridge's angle
+         around its (wx,wy) pivot, so the world path follows wx/wy AND angle */
+      const a = Phaser.Math.DegToRad(b.angle ?? 0);
+      const cos = Math.cos(a);
+      const sin = Math.sin(a);
+      const ax = b.wx + b.deckX1 * cos - b.deckY1 * sin;
+      const ay = b.wy + b.deckX1 * sin + b.deckY1 * cos;
+      const bx = b.wx + b.deckX2 * cos - b.deckY2 * sin;
+      const by = b.wy + b.deckX2 * sin + b.deckY2 * cos;
+      const dx = bx - ax;
+      const dy = by - ay;
       const len2 = dx * dx + dy * dy;
-      const t = Math.max(0, Math.min(1, ((x - b.x1) * dx + (y - b.y1) * dy) / len2));
-      const px = b.x1 + dx * t;
-      const py = b.y1 + dy * t;
+      const t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / len2));
+      const px = ax + dx * t;
+      const py = ay + dy * t;
       if (Math.hypot(x - px, y - py) <= BRIDGE_HALF_WIDTH) return true;
     }
     return false;
@@ -415,6 +452,15 @@ export class IslandScene extends Phaser.Scene {
   /* ── loop ── */
 
   update(_t: number, dtMs: number) {
+    if (this.rulerMode) {
+      const c = this.cameras.main;
+      const sp = (520 * dtMs) / 1000 / c.zoom;
+      if (this.cursors.left.isDown) c.scrollX -= sp;
+      if (this.cursors.right.isDown) c.scrollX += sp;
+      if (this.cursors.up.isDown) c.scrollY -= sp;
+      if (this.cursors.down.isDown) c.scrollY += sp;
+      return;
+    }
     const cam = this.cameras.main;
     cam.setZoom(Phaser.Math.Linear(cam.zoom, this.targetZoom(), 0.03));
 
