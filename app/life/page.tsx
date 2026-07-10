@@ -1,129 +1,97 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Nav from "../components/layout/Nav";
-import Footer from "../components/layout/Footer";
-import SectionHeader from "../components/sections/SectionHeader";
-import PhotoGallery from "../components/life/PhotoGallery";
-import PortalCards from "../components/life/PortalCards";
-import Reveal from "../components/ui/Reveal";
-import { interests, hobbies, photos, youtubeUrl } from "../data/life";
+import Link from "next/link";
+import PageShell from "../components/site/PageShell";
+import { photos } from "../data/life";
 
 export const metadata: Metadata = {
-  title: "Beyond the code | Langdon Huynh",
-  description:
-    "The human side: hobbies, photos, bookshelf, and journal entries.",
+  title: "Life | Langdon Huynh",
+  description: "The non-technical me: hobbies, writing, what I read, and photos.",
 };
 
-const heroPhotos = photos.slice(0, 8);
+const DIRECTORY = [
+  { label: "Hobbies", href: "/life/hobbies", desc: "what I do for fun" },
+  { label: "Writing", href: "/life/writing", desc: "essays & notes" },
+  { label: "Bookshelf", href: "/life/bookshelf", desc: "what I'm reading" },
+];
 
-export default function Life() {
+const gallery = photos.slice(0, 6);
+
+export default function LifePage() {
   return (
-    <>
-      <Nav />
-      <main className="relative mx-auto max-w-5xl overflow-x-clip">
-        {/* header with photo-collage backdrop */}
-        <section className="relative px-5 pb-12 pt-16 sm:px-9 sm:pt-20">
-          {/* background gallery */}
-          <div aria-hidden className="absolute inset-0 overflow-hidden">
-            <div className="grid h-full w-full grid-cols-4 gap-2 opacity-60">
-              {heroPhotos.map((photo, i) => (
-                <div
-                  key={photo.src}
-                  className={`relative overflow-hidden rounded-md ${i % 2 === 1 ? "translate-y-6" : ""}`}
-                >
-                  <Image
-                    src={photo.src}
-                    alt=""
-                    fill
-                    sizes="25vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-            {/* light wash so the type stays readable */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#f8f7f4]/45 via-[#f8f7f4]/25 to-[#f8f7f4]" />
-          </div>
+    <PageShell>
+      <section className="pt-14">
+        <h1 className="ffam-newsreader text-[clamp(34px,6vw,46px)] font-medium tracking-[-0.01em] text-[#2a2620]">
+          Life
+        </h1>
 
-          <div className="relative z-10">
-            <h1 className="hero-enter font-display text-[clamp(48px,9vw,96px)] font-extrabold leading-[0.9] tracking-[-0.05em] text-[#111] [text-shadow:0_1px_12px_rgba(248,247,244,0.9)]">
-              beyond
-              <br />
-              <span className="font-light text-[#555]">the code</span>
-            </h1>
-            <div className="hero-enter hero-enter-2 mt-6 h-px w-16 bg-[#111]" />
-            <p className="hero-enter hero-enter-3 mt-6 max-w-[440px] rounded-lg bg-[#f8f7f4]/75 p-3 text-[14.5px] font-medium leading-[1.8] text-[#333] backdrop-blur-sm">
-              The parts of me that don&apos;t show up in a commit history: what I
-              play, where I&apos;ve been, what I read, and what I think about.
-            </p>
-          </div>
-        </section>
-
-        {/* hobbies */}
-        <section className="relative px-5 pt-10 sm:px-9">
-          <Reveal>
-            <SectionHeader num="01" title="Hobbies" />
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[2.5px] text-[#bbb]">
-                  These days
-                </p>
-                <p className="mt-3 max-w-[440px] text-[13.5px] leading-[1.8] text-[#555]">
-                  {hobbies.now}
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[2.5px] text-[#bbb]">
-                  How I got here
-                </p>
-                <p className="mt-3 max-w-[440px] text-[13.5px] leading-[1.8] text-[#555]">
-                  {hobbies.past}
-                </p>
-              </div>
-            </div>
-            <div className="mt-7 flex flex-wrap gap-2">
-              {interests.map((interest) => (
-                <span
-                  key={interest}
-                  className="rounded-full border border-black/12 px-3.5 py-1.5 text-[11px] font-medium text-[#777]"
-                >
-                  {interest}
-                </span>
-              ))}
-              <a
-                href={youtubeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-black/12 px-3.5 py-1.5 text-[11px] font-medium text-[#777] transition-colors hover:border-black/30 hover:text-[#111]"
+        {/* directory */}
+        <ul className="mt-8 border-y border-[#e6ddcd]">
+          {DIRECTORY.map((d) => (
+            <li key={d.href} className="border-b border-[#e6ddcd] last:border-b-0">
+              <Link
+                href={d.href}
+                className="group flex items-baseline justify-between py-3.5"
               >
-                YouTube ↗
-              </a>
+                <span className="text-[16px] text-[#2a2620] transition-colors group-hover:text-[#9c7a43]">
+                  {d.label}
+                </span>
+                <span className="ffam-mono text-[12px] text-[#a8a08f]">
+                  {d.desc} →
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* intro / navigation */}
+        <p className="mt-8 max-w-[600px] text-[16px] leading-[1.8] text-[#4a463d]">
+          When I&apos;m not building things, you&apos;ll find me at poker nights,
+          playing soccer or golf, snowboarding up in Tahoe, editing videos, or
+          chasing new food spots around the Bay. This corner of the site is the
+          non-technical me — check{" "}
+          <Link
+            href="/life/hobbies"
+            className="text-[#9c7a43] underline decoration-1 underline-offset-4 hover:text-[#6f5528]"
+          >
+            Hobbies
+          </Link>{" "}
+          for what I&apos;m into,{" "}
+          <Link
+            href="/life/writing"
+            className="text-[#9c7a43] underline decoration-1 underline-offset-4 hover:text-[#6f5528]"
+          >
+            Writing
+          </Link>{" "}
+          for essays and half-formed thoughts, and the{" "}
+          <Link
+            href="/life/bookshelf"
+            className="text-[#9c7a43] underline decoration-1 underline-offset-4 hover:text-[#6f5528]"
+          >
+            Bookshelf
+          </Link>{" "}
+          for what I&apos;m reading. The 🔴 up in the nav opens Langdon&apos;s
+          World, a little playable walk through my life.
+        </p>
+
+        {/* photo gallery */}
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {gallery.map((p) => (
+            <div
+              key={p.src}
+              className="relative aspect-square overflow-hidden rounded-lg border border-black/5 bg-[#e8e1d2]"
+            >
+              <Image
+                src={p.src}
+                alt={p.caption}
+                fill
+                sizes="(max-width: 640px) 45vw, 220px"
+                className="object-cover"
+              />
             </div>
-          </Reveal>
-        </section>
-
-        {/* bookshelf + journal portals */}
-        <section className="relative px-5 pt-14 sm:px-9">
-          <Reveal>
-            <SectionHeader num="02" title="Dive into my brain" />
-          </Reveal>
-          <Reveal delay={100}>
-            <PortalCards />
-          </Reveal>
-        </section>
-
-        {/* photos */}
-        <section className="relative px-5 pt-14 sm:px-9">
-          <Reveal>
-            <SectionHeader num="03" title="Lens to my life" />
-          </Reveal>
-          <PhotoGallery />
-        </section>
-
-        <Footer />
-      </main>
-    </>
+          ))}
+        </div>
+      </section>
+    </PageShell>
   );
 }

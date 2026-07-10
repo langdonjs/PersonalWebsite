@@ -56,6 +56,20 @@ export default function Bookshelf() {
   const sortIndicator = (key: SortKey) =>
     sortKey === key ? (sortAsc ? " ↑" : " ↓") : "";
 
+  if (bookshelf.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-[#d8cfbd] bg-[#efe7d8] px-6 py-16 text-center">
+        <p className="ffam-newsreader text-[22px] text-[#2a2620]">
+          Will be updated soon
+        </p>
+        <p className="mx-auto mt-3 max-w-[380px] text-[13.5px] leading-[1.7] text-[#8d8676]">
+          I&apos;m putting together the books, papers, and essays worth
+          remembering. Check back shortly.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="mb-5 flex flex-wrap gap-2">

@@ -5,15 +5,18 @@ export default function Nav() {
   return (
     <nav className="sticky top-0 z-50 flex h-14 items-center justify-center border-b border-black/8 bg-[#f8f7f4]/80 backdrop-blur-xl">
       <div className="flex items-center gap-4 sm:gap-9">
-        <Link href="/#about" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
-          About
+        <Link href="/" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
+          Home
         </Link>
-        <Link href="/#experience" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
+        <Link href="/experience" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
           <span className="hidden sm:inline">Work Experience</span>
           <span className="sm:hidden">Work</span>
         </Link>
-        <Link href="/#projects" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
+        <Link href="/projects" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
           Projects
+        </Link>
+        <Link href="/about" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
+          About Me
         </Link>
         <Link href="/life" className="text-xs font-medium text-[#555] transition-colors hover:text-[#111]">
           Life

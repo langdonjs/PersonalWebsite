@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import InkDragon from "../ink/InkDragon";
 
 export default function Hero() {
@@ -18,21 +19,22 @@ export default function Hero() {
         </p>
         <div className="hero-enter hero-enter-2 mb-6 h-px w-16 bg-[#111]" />
         <p className="hero-enter hero-enter-3 max-w-[460px] text-[14.5px] leading-[1.8] text-[#555]">
-          I build <strong className="font-semibold text-[#111]">AI systems</strong> at
-          the edge of vision and language, currently reconstructing the real world
-          in 3D at <strong className="font-semibold text-[#111]">Looq AI</strong>.
+          Currently interning at{" "}
+          <strong className="font-semibold text-[#111]">Looq AI</strong>, focused
+          on 3D reconstruction, perception, and depth maxxing for edge devices and
+          stuff.
           <br />
           <br />
           CS + Applied Math @{" "}
           <strong className="font-semibold text-[#111]">UC Berkeley</strong> · GPA 3.9
         </p>
         <div className="hero-enter hero-enter-4 mt-8 flex items-center gap-4">
-          <a
-            href="#projects"
+          <Link
+            href="/projects"
             className="rounded-full bg-[#111] px-6 py-2.5 text-xs font-semibold text-[#f8f7f4] transition-opacity hover:opacity-80"
           >
             View my work
-          </a>
+          </Link>
           <a
             href="https://github.com/langdonjs"
             target="_blank"

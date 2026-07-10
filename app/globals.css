@@ -101,3 +101,15 @@ h6 {
     animation: none;
   }
 }
+
+/* --- Redesign type utilities (editorial direction) --- */
+.ffam-newsreader {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+}
+.ffam-fraunces {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+}
+.ffam-mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+}
