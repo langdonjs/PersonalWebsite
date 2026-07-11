@@ -21,7 +21,7 @@ export default function WritingPage() {
           Writing
         </h1>
         <p className="mt-4 max-w-[540px] text-[15px] leading-[1.7] text-[#6b665b]">
-          Essays, notes, and things I&apos;m thinking about. This is new — more
+          Essays, notes, and things I&apos;m thinking about. This is new, more
           coming soon.
         </p>
 
@@ -30,8 +30,8 @@ export default function WritingPage() {
         <div className="flex flex-col items-center py-24 text-center">
           <span className="text-[22px] text-[#cfc6b4]">✦</span>
           <p className="mt-4 text-[15px] leading-[1.7] text-[#8d8676]">
-            Nothing here yet. I&apos;m working on a few pieces
-            <br />— check back in a bit.
+            Nothing here yet. I&apos;m working on a few pieces,
+            <br />check back in a bit.
           </p>
         </div>
 

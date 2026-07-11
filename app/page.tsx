@@ -1,13 +1,16 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import PageShell from "./components/site/PageShell";
 import { GithubIcon, LinkedinIcon } from "./components/site/Icons";
 
-const NOW = [
-  "Interning at Looq AI — 3D reconstruction & perception for edge devices",
-  "Finishing CS + Applied Math at UC Berkeley, graduating May 2026",
-  "Open to full-time roles in ML and software engineering",
-  "Currently reading: Thinking, Fast and Slow — Kahneman",
-  "Listening to: Khruangbin, Bill Evans, Tyler, the Creator",
+const CURRENTLY: ReactNode[] = [
+  "Exploring computer vision, edge devices, and 3D reconstruction at Looq AI",
+  "Studying Computer Science + Applied Math at UC Berkeley",
+  "Open to internships and full-time roles in ML and software engineering",
+  <>
+    Reading <em className="italic">White Nights</em> by Fyodor Dostoevsky
+  </>,
+  "Sidequesting around the Bay Area",
 ];
 
 const LINKS = [
@@ -32,14 +35,16 @@ export default function Home() {
             </h1>
             <div className="mt-6 space-y-5 text-[16.5px] leading-[1.75] text-[#4a463d]">
               <p>
-                I&apos;m a student at UC Berkeley studying CS + Applied Math. I
-                spend most of my time building things, thinking about how
-                machines learn to see, and chasing good coffee while I do it.
+                I&apos;m an undergraduate at UC Berkeley studying Computer
+                Science + Applied Math. Most recently I interned at Looq AI,
+                where I built a SLAM computer vision pipeline that runs on edge
+                devices for 3D localization and reconstruction.
               </p>
               <p>
-                I&apos;m interested in the gap between research and things that
-                actually work: perception, systems, the full stack from GPU
-                kernels to the product.
+                Before that I worked on active-learning pipelines at Perceive AI
+                and full-stack development at BlueRobins. I&apos;m still figuring
+                out exactly where I&apos;m headed, but right now I&apos;m drawn to
+                software engineering, machine learning, and robotics.
               </p>
             </div>
             <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px]">
@@ -74,15 +79,15 @@ export default function Home() {
 
       <hr className="mt-14 border-0 border-t border-[#e0d8c8]" />
 
-      {/* NOW */}
+      {/* CURRENTLY */}
       <section className="mt-12">
         <p className="ffam-mono text-[11px] uppercase tracking-[0.18em] text-[#a8a08f]">
-          Now
+          Currently
         </p>
         <ul className="mt-6 space-y-4">
-          {NOW.map((item) => (
+          {CURRENTLY.map((item, i) => (
             <li
-              key={item}
+              key={i}
               className="flex items-start gap-3.5 text-[16px] leading-[1.6] text-[#413d34]"
             >
               <span aria-hidden className="ffam-mono mt-[1px] text-[#c1b7a2]">

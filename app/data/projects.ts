@@ -4,9 +4,13 @@ export type ProjectLink = {
 };
 
 export type Project = {
+  /** URL slug for the on-site write-up page at /projects/<slug> */
+  slug: string;
   name: string;
   stack: string;
   year: string;
+  /** Optional award/recognition shown as a small badge (e.g. hackathon win) */
+  award?: string;
   blurb: string;
   /** Short label shown inside the placeholder media box until a real GIF exists */
   monogram: string;
@@ -14,11 +18,32 @@ export type Project = {
   gradient: string;
   /** Set to a file in /public to replace the placeholder with a real GIF/image */
   media?: string;
+  /**
+   * Long-form write-up shown on /projects/<slug>. Plain text — blank lines
+   * separate paragraphs. Leave undefined to show a "coming soon" placeholder.
+   */
+  writeup?: string;
   links: ProjectLink[];
 };
 
 export const projects: Project[] = [
   {
+    slug: "ironbook",
+    name: "Ironbook",
+    stack: "TypeScript · React · FastAPI · COLMAP · Gaussian Splatting · WebGL",
+    year: "Jun 2026",
+    award: "1st Place Grand Prize · UC Berkeley AI Hackathon",
+    blurb:
+      "Turns physical spaces into navigable 3D scenes you can explore and query in natural language. A COLMAP + Gaussian Splatting + WebGL pipeline reconstructs a walkable scene from photos in ~4 minutes, paired with a spatial AI agent that drives the camera to answer questions about the space.",
+    monogram: "IB",
+    gradient: "linear-gradient(135deg, #1b1b1f 0%, #45454d 100%)",
+    media: "/projects/ironbook.gif",
+    writeup:
+      "Ironbook converts physical environments into navigable 3D scenes that users can explore and query through natural language.\n\nThe reconstruction pipeline chains COLMAP, Gaussian Splatting, and a WebGL renderer to turn a set of ordinary photos into a walkable 3D scene in about four minutes.\n\nOn top of the scene sits a spatial AI agent with six camera tools (navigate, zoom, rotate, highlight objects, and answer spatial questions) so you can ask about a room and watch the view respond.\n\nIronbook placed 1st among 460+ teams and 1,300+ participants, earning the $5,000 Grand Prize at the UC Berkeley AI Hackathon.",
+    links: [],
+  },
+  {
+    slug: "clash3d",
     name: "Clash3D",
     stack: "Python · YOLO · ByteTrack · Blender",
     year: "May 2026",
@@ -29,6 +54,7 @@ export const projects: Project[] = [
     links: [{ label: "GitHub", url: "https://github.com/langdonjs/Clash3D" }],
   },
   {
+    slug: "redforce",
     name: "RedForce",
     stack: "React · Express · TypeScript · SQLite",
     year: "2026 · Perplexity Hackathon",
@@ -39,6 +65,7 @@ export const projects: Project[] = [
     links: [{ label: "GitHub", url: "https://github.com/langdonjs/RedForce" }],
   },
   {
+    slug: "calvents",
     name: "CalVents",
     stack: "React Native · Supabase · Python · Selenium",
     year: "Sep–Dec 2025",
@@ -49,6 +76,7 @@ export const projects: Project[] = [
     links: [],
   },
   {
+    slug: "pitchpredictor",
     name: "PitchPredictor",
     stack: "Python · scikit-learn · pandas",
     year: "2024–2025 · Published",

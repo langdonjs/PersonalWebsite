@@ -31,12 +31,4 @@ export const experiences: Experience[] = [
     blurb:
       "Next.js + Supabase features for 500+ users · Stripe + Google Calendar webhook automation across 100+ sessions.",
   },
-  {
-    period: "Aug–Dec 2024",
-    company: "SUR",
-    role: "Lead Full Stack Mobile Developer",
-    location: "Berkeley",
-    blurb:
-      "Rebuilt vehicle availability for 100 vehicles into a clean range model · SQL functions for search + checkout.",
-  },
 ];

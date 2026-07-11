@@ -386,7 +386,7 @@ export default function JourneyGame() {
             className="mt-4 h-auto w-[min(82vw,520px)] drop-shadow-[0_4px_0_rgba(0,0,0,0.45)]"
           />
           <p className="mt-5 max-w-lg text-[10px] leading-[2.1] text-[#aab4d4] sm:text-xs">
-            A little game about my life — walk around and interact with the
+            A little game about my life. Walk around and interact with the
             landmarks, the people, and the islands to learn my story.
           </p>
           <p className="mt-3 max-w-lg text-[10px] font-bold leading-[2.1] text-[#7ec8ff] sm:text-xs">
